@@ -1,16 +1,16 @@
-package CRUDInterface;
+package DbTables;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "PRODUCTS")
-public class ProductTest {
+public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ProductID", updatable = false, nullable = false)
-    private int ProductID;
+    @Column(name = "ProductID", updatable = false)
+    private String productID;
 
-    // name, category, perishables, cost, stock, selling price
     @Column(name = "Name")
     private String prodName;
 
@@ -29,7 +29,12 @@ public class ProductTest {
     @Column(name = "Selling price")
     private float sell_price;
 
-    public ProductTest(String prodName, String prodCat, boolean perishable, float cost, int stock, float sell_price) {
+    @OneToMany(mappedBy = "product")
+    private Set<PurchaseHistory> receipts = new HashSet<>();
+
+
+    public Product(String productID, String prodName, String prodCat, boolean perishable, float cost, int stock, float sell_price) {
+        this.productID = productID;
         this.prodName = prodName;
         this.prodCat = prodCat;
         this.perishable = perishable;
@@ -38,14 +43,14 @@ public class ProductTest {
         this.sell_price = sell_price;
     }
 
-    public ProductTest(){}
+    public Product(){}
 
-    public int getProductID() {
-        return ProductID;
+    public String getProductID() {
+        return productID;
     }
 
-    public void setProductID(int productID) {
-        ProductID = productID;
+    public void setProductID(String productID) {
+        productID = productID;
     }
 
     public String getProdName() {
@@ -94,5 +99,13 @@ public class ProductTest {
 
     public void setSell_price(float sell_price) {
         this.sell_price = sell_price;
+    }
+
+    public Set<PurchaseHistory> getReceipts() {
+        return receipts;
+    }
+
+    public void setReceipts(Set<PurchaseHistory> receipts) {
+        this.receipts = receipts;
     }
 }
