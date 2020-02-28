@@ -31,6 +31,14 @@ public  interface CRUDInterface<E>  {
      */
     ArrayList<E> readById(Class<E> c, int id);
 
+    /**
+     *  read by Id from Jordan just to see what it does
+     * @param c
+     * @param id
+     * @return
+     */
+    E readByIdReturnE(Class<E> c, int id);
+
     List<E> readAll(Class<E> c);
 
     /**

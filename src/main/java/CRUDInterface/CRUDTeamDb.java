@@ -55,13 +55,12 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
     }
 
     @Override
-    public ArrayList<E> readById(Class c, int id) {
-        return null;
-       /*ArrayList<E> entries = null;
+    public E readByIdReturnE(Class<E> c, int id) {
+        Object entry = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
-            entries = c.cast(session.get(c, id));
+            entry = c.cast(session.get(c, id));
             session.getTransaction().commit();
         } catch (HibernateException ex) {
             if (session!=null) session.getTransaction().rollback();
@@ -71,8 +70,13 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
                 session.close();
             }
         }
-        return (E) entries;*/
+        return (E) entry;
 
+    }
+
+    @Override
+    public ArrayList<E> readById(Class c, int id) {
+        return null;
     }
 
     @Override
@@ -94,7 +98,6 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         }
 
         return entries;
-
     }
 
     @Override
