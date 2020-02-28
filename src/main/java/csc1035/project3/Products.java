@@ -1,3 +1,8 @@
+/**
+This class is used for creating product objects and linking our products to the database.
+ The types can be changed if required, or this class can be deleted if a better one is created later on.
+*/
+
 package csc1035.project3;
 
 import javax.persistence.*;
