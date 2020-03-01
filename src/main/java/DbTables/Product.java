@@ -8,7 +8,7 @@ import java.util.Set;
 public class Product {
 
     @Id
-    @Column(name = "ProductID", updatable = false)
+    @Column(name = "ProductID", updatable = false, nullable = false)
     private String productID;
 
     @Column(name = "Name")
@@ -21,19 +21,19 @@ public class Product {
     private boolean perishable;
 
     @Column(name = "Cost")
-    private float cost;
+    private double cost;
 
     @Column(name = "Stock")
     private int stock;
 
-    @Column(name = "Selling price")
-    private float sell_price;
+    @Column(name = "Selling_price")
+    private double sell_price;
 
     @OneToMany(mappedBy = "product")
     private Set<PurchaseHistory> receipts = new HashSet<>();
 
 
-    public Product(String productID, String prodName, String prodCat, boolean perishable, float cost, int stock, float sell_price) {
+    public Product(String productID, String prodName, String prodCat, boolean perishable, double cost, int stock, double sell_price) {
         this.productID = productID;
         this.prodName = prodName;
         this.prodCat = prodCat;
@@ -77,11 +77,11 @@ public class Product {
         this.perishable = perishable;
     }
 
-    public float getCost() {
+    public double getCost() {
         return cost;
     }
 
-    public void setCost(float cost) {
+    public void setCost(double cost) {
         this.cost = cost;
     }
 
@@ -93,11 +93,11 @@ public class Product {
         this.stock = stock;
     }
 
-    public float getSell_price() {
+    public double getSell_price() {
         return sell_price;
     }
 
-    public void setSell_price(float sell_price) {
+    public void setSell_price(double sell_price) {
         this.sell_price = sell_price;
     }
 

@@ -9,23 +9,23 @@ import java.util.Set;
 public class Receipt {
 
     @Id
-    @Column(name = "ReceiptID", updatable = false)
+    @Column(name = "ReceiptID", updatable = false, nullable = false)
     private String receiptID;
 
-    @Column(name = "Total cost")
-    private int totalc;
+    @Column(name = "Total_cost")
+    private double totalc;
 
-    @Temporal(TemporalType.DATE)
+    //@Temporal(TemporalType.DATE)
     @Column(name = "Date")
-    private Date date;
+    private String date;
 
-    @Column(name = "Money given")
-    private float paid;
+    @Column(name = "Money_given")
+    private double paid;
 
     @OneToMany(mappedBy = "receipt")
     private Set<PurchaseHistory> products = new HashSet<>();
 
-    public Receipt(String receiptID, int totalc, Date date, float paid) {
+    public Receipt(String receiptID, double totalc, String date, double paid) {
         this.receiptID = receiptID;
         this.totalc = totalc;
         this.date = date;
@@ -43,27 +43,27 @@ public class Receipt {
         this.receiptID = receiptID;
     }
 
-    public int getTotalc() {
+    public double getTotalc() {
         return totalc;
     }
 
-    public void setTotalc(int totalc) {
+    public void setTotalc(double totalc) {
         this.totalc = totalc;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public float getPaid() {
+    public double getPaid() {
         return paid;
     }
 
-    public void setPaid(float paid) {
+    public void setPaid(double paid) {
         this.paid = paid;
     }
 

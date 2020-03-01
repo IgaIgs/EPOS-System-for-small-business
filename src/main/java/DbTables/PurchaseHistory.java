@@ -26,9 +26,6 @@ public class PurchaseHistory {
     @Column(name = "Quantity")
     private int quantity;
 
-    public PurchaseHistory() {
-    }
-
     public PurchaseHistory(Product p, Receipt r, int quantity){
         // create primary key
         this.id = new PurchaseHistoryID(p.getProductID(), r.getReceiptID());
@@ -41,6 +38,9 @@ public class PurchaseHistory {
         // update relationships to assure referential integrity
         p.getReceipts().add(this);
         r.getProducts().add(this);
+    }
+
+    public PurchaseHistory() {
     }
 
     public PurchaseHistoryID getId() {

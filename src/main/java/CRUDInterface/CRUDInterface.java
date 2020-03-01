@@ -8,7 +8,7 @@ public  interface CRUDInterface<E>  {
 
     /**
      * create entries
-     * @param e
+     * @param e - entry to be created in a table
      */
     void create(E e);
 
@@ -21,7 +21,7 @@ public  interface CRUDInterface<E>  {
     /**
      * Returns a hashMap with names of product as keys and product IDs as values
      */
-    HashMap<String, String> readByName(Class<E> c, String name);
+    HashMap<String, String> readProductsByName(Class<E> c, String name);
 
     /**
      * Return an arraylist with all entry's fields in order given its ID
@@ -29,15 +29,22 @@ public  interface CRUDInterface<E>  {
      * @param id - what is the ID of the entry
      * @return - an arraylist
      */
-    ArrayList<E> readById(Class<E> c, int id);
+    ArrayList<E> readById(Class<E> c, String id);
 
     /**
-     *  read by Id from Jordan just to see what it does
-     * @param c
-     * @param id
-     * @return
+     *  read by Id from Jordan which returns object representations of entries in the table
+     * @param c - which table
+     * @param id - entry id
+     * @return - the entry
      */
-    E readByIdReturnE(Class<E> c, int id);
+    E readByIdReturnE(Class<E> c, String id);
+
+    /**
+     * method for product table to enable looking for product iDs using their names
+     * @param name - entry id
+     * @return - name of the product
+     */
+    String readByProdNameReturnId(String name);
 
     List<E> readAll(Class<E> c);
 
@@ -46,7 +53,8 @@ public  interface CRUDInterface<E>  {
      * @param c - which classs/table to delete from
      * @param id - id of the entry to be deleted
      */
-    void delete(Class<E> c, int id);
+    void delete(Class<E> c, String id);
+
 
 }
 

@@ -6,7 +6,7 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://cs-db.ncl.ac.uk/csc1035_team04</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:8181/csc1035_team04</property>
         <property name="hibernate.connection.username">csc1035_team04</property>
         <property name="hibernate.connection.password">Sear=Hit_Gas</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
@@ -14,9 +14,10 @@
         <property name="format_sql">true</property>
         <property name="hbm2ddl.auto">update </property>
 
-        <!--<mapping class="csc1035.project3.CLASS" /> <- Add a new mapping class for a new table in the database ->
-        <mapping class="csc1035.project3.CLASS" />
-        -->
+        <mapping class="DbTables.Product" /> <!-- Add a new mapping class for a new table in the database -->
+        <mapping class="DbTables.PurchaseHistory" />
+        <mapping class="DbTables.PurchaseHistoryID" />
+        <mapping class="DbTables.Receipt" />
 
     </session-factory>
 </hibernate-configuration>
