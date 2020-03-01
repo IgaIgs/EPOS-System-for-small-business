@@ -1,10 +1,12 @@
 package DbTables;
 
+import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity(name = "PRODUCTS")
+@DynamicUpdate
 public class Product {
 
     @Id

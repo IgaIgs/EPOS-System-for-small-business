@@ -22,14 +22,18 @@ public class Receipt {
     @Column(name = "Money_given")
     private double paid;
 
+    @Column(name = "Change_given")
+    private double change;
+
     @OneToMany(mappedBy = "receipt")
     private Set<PurchaseHistory> products = new HashSet<>();
 
-    public Receipt(String receiptID, double totalc, String date, double paid) {
+    public Receipt(String receiptID, double totalc, String date, double paid, double change) {
         this.receiptID = receiptID;
         this.totalc = totalc;
         this.date = date;
         this.paid = paid;
+        this.change = change;
     }
 
     public Receipt() {
@@ -73,5 +77,13 @@ public class Receipt {
 
     public void setProducts(Set<PurchaseHistory> products) {
         this.products = products;
+    }
+
+    public double getChange() {
+        return change;
+    }
+
+    public void setChange(double change) {
+        this.change = change;
     }
 }

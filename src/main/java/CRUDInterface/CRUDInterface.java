@@ -49,7 +49,7 @@ public  interface CRUDInterface<E>  {
     List<E> readAll(Class<E> c);
 
     /**
-     * delete by id
+     * delete by id. Doesn't work on Purchase History table where there is no id but two foreign keys
      * @param c - which classs/table to delete from
      * @param id - id of the entry to be deleted
      */
