@@ -25,11 +25,10 @@ public  interface CRUDInterface<E>  {
 
     /**
      * Return an arraylist with all entry's fields in order given its ID
-     * @param c - which class/table is the entry from
      * @param id - what is the ID of the entry
      * @return - an arraylist
      */
-    ArrayList<E> readById(Class<E> c, String id);
+    void readProdById(String id);
 
     /**
      *  read by Id from Jordan which returns object representations of entries in the table

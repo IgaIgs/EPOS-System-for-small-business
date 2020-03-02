@@ -22,7 +22,9 @@ public class CRUDRunner {
         //cI.update(goldRing);
         //cI.update(ringNteq);
         //cI.update(purchaseHistory);
-        cI.update(rammBotOpen);
+        //cI.update(rammBotOpen);
+
+        cI.readProdById("rammTeq");
 
         //System.out.println(cI.readAll(Product.class));
         //System.out.println(cI.readByIdReturnE(Product.class, "p2"));
