@@ -11,20 +11,23 @@ public class CRUDRunner {
         CRUDInterface cI = new CRUDTeamDb();
 
 
-        Receipt ringNteq = new Receipt("r1", 287.95, "01/03/2020",290.00, 2.05);
-        Product rammTequilla = new Product("rammTeq","Rammstein Tequilla", "RammMerch",true,68.95,10,79.95);
-        Product goldRing = new Product("goldRng", "Gold Ring", "Jewellery", false, 120.00, 4, 180.00);
-        Product rammBotOpen = new Product("rammBotOp","Rammstein Bottle Opener", "RammMerch", false, 12.00, 19,14.00 );
+        Receipt ringNteq = new Receipt(287.95, "01/03/2020",290.00);
+        Product rammTequilla = new Product("Rammstein Tequilla", "RammMerch",true,68.95,10,79.95);
+        Product goldRing = new Product("Gold Ring", "Jewellery", false, 120.00, 4, 180.00);
+        Product rammBotOpen = new Product("Rammstein Bottle Opener", "RammMerch", false, 12.00, 19,14.00 );
         PurchaseHistory purchaseHistory = new PurchaseHistory(goldRing, ringNteq, 1);
+        //TODO for Ben: automatic update of purchaseHistory after selling transaction
 
-        rammBotOpen.setStock(19);
-        //cI.update(rammTequilla);
-        //cI.update(goldRing);
-        //cI.update(ringNteq);
-        //cI.update(purchaseHistory);
-        //cI.update(rammBotOpen);
+//        cI.generalUpdate(rammTequilla);
+//        cI.generalUpdate(goldRing);
+//        cI.generalUpdate(rammBotOpen);
+//        cI.generalUpdate(ringNteq);
+        cI.generalUpdate(purchaseHistory);
 
-        cI.readProdById("rammTeq");
+
+        //cI.readProdById("rammTeq");
+
+        //cI.readProduct(1);
 
         //System.out.println(cI.readAll(Product.class));
         //System.out.println(cI.readByIdReturnE(Product.class, "p2"));

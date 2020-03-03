@@ -9,41 +9,37 @@ import java.util.Set;
 public class Receipt {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ReceiptID", updatable = false, nullable = false)
-    private String receiptID;
+    private int receiptID;
 
     @Column(name = "Total_cost")
     private double totalc;
 
-    //@Temporal(TemporalType.DATE)
     @Column(name = "Date")
     private String date;
 
     @Column(name = "Money_given")
     private double paid;
 
-    @Column(name = "Change_given")
-    private double change;
 
     @OneToMany(mappedBy = "receipt")
     private Set<PurchaseHistory> products = new HashSet<>();
 
-    public Receipt(String receiptID, double totalc, String date, double paid, double change) {
-        this.receiptID = receiptID;
+    public Receipt(double totalc, String date, double paid) {
         this.totalc = totalc;
         this.date = date;
         this.paid = paid;
-        this.change = change;
     }
 
     public Receipt() {
     }
 
-    public String getReceiptID() {
+    public int getReceiptID() {
         return receiptID;
     }
 
-    public void setReceiptID(String receiptID) {
+    public void setReceiptID(int receiptID) {
         this.receiptID = receiptID;
     }
 
@@ -77,13 +73,5 @@ public class Receipt {
 
     public void setProducts(Set<PurchaseHistory> products) {
         this.products = products;
-    }
-
-    public double getChange() {
-        return change;
-    }
-
-    public void setChange(double change) {
-        this.change = change;
     }
 }

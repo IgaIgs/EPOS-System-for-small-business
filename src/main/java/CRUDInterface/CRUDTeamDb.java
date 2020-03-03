@@ -4,10 +4,10 @@ import DbTables.Product;
 import csc1035.project3.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
-import java.util.ArrayList;
+
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 // This class will contain all the CRUD methods and use the CRUD interface
@@ -34,7 +34,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
     }
 
     @Override
-    public void update(E e) {
+    public void generalUpdate(E e) {
 
         try {
             session = HibernateUtil.getSessionFactory().openSession();
@@ -51,16 +51,19 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         }
     }
 
-    /**
-     * Returns a hashMap with names of product as keys and product IDs as values
-     */
     @Override
-    public HashMap<String, String> readProductsByName(Class<E> c, String name) {
-        /*HashMap<String, String> prodNameID = new HashMap<>();
+    public void updateProduct(List<E> list, String id) {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
-            prodNameID.putIfAbsent(name, c.cast(session.get(c, id)));
+            Query query = session.createQuery("update PRODUCTS p set p.prodName = :new_name, p.prodCat = :new_cat, " +
+                "p.cost = :new_cost, p.stock = :new_stock, p.sell_price = :new_sellP where p.id = :prod_id ");
+            query.setParameter("new_name",list.get(1));
+            query.setParameter("new_cat",list.get(2));
+            query.setParameter("new_cost",list.get(4));
+            query.setParameter("new_stock",list.get(5));
+            query.setParameter("new_sellP",list.get(6));
+            query.executeUpdate();
             session.getTransaction().commit();
         } catch (HibernateException ex) {
             if (session!=null) session.getTransaction().rollback();
@@ -69,8 +72,45 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             if (session != null) {
                 session.close();
             }
-        }*/
-        return null;
+        }
+    }
+
+    /**
+     * Returns product's id and name by category given by user
+     */
+    @Override
+    public void readProduct(int userCat) {
+        // TODO make sure input class provides int  using next.int
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            String cat = getCategories(session).get(userCat);
+            Query query = session.createQuery("select p.id, p.prodName from PRODUCTS p where p.prodCat = :new_cat");
+            query.setParameter("new_cat", cat);
+            List results = query.getResultList();
+
+            for (Object i : results){
+                System.out.println(i.toString());
+            }
+
+
+            session.getTransaction().commit();
+        } catch (HibernateException ex) {
+            if (session!=null) session.getTransaction().rollback();
+            ex.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+//TODO for Ben: make the getCategories and readProduct collaboration work
+    private List<String> getCategories(Session session){
+        List results = null;
+
+        Query query = session.createQuery("select distinct p.prodCat from PRODUCTS p");
+        results = query.getResultList();
+        return results;
     }
 
     @Override

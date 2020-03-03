@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Entity(name = "PURCHASE_HISTORY")
 public class PurchaseHistory {
 
+    // @Id
     @EmbeddedId
     private PurchaseHistoryID id;
 

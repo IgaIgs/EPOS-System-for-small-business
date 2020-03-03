@@ -16,12 +16,14 @@ public  interface CRUDInterface<E>  {
      * update entries
      * @param e - update the entry in a table
      */
-    void update(E e);
+    void generalUpdate(E e);
+
+    void updateProduct(List<E> list, String id);
 
     /**
-     * Returns a hashMap with names of product as keys and product IDs as values
+     * Returns product's id and name by category given by user
      */
-    HashMap<String, String> readProductsByName(Class<E> c, String name);
+    void readProduct(int userCat);
 
     /**
      * Return an arraylist with all entry's fields in order given its ID
