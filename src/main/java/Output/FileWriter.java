@@ -1,13 +1,14 @@
 package Output;
 
 import DbTables.Product;
+import DbTables.Receipt;
 import java.util.*;
 import java.io.*;
 
 /**
  * Class used for writing to csv files
  */
-public class CSVWriter {
+public class FileWriter {
 
     /**
      * A method for writing products from the database to the backup csv file
@@ -22,5 +23,17 @@ public class CSVWriter {
             backupCSV.println(String.format("%d,%s,%s,%s,%d,%d,%d", item.getProductID(), item.getProdName(), item.getProdCat(), item.isPerishable(), item.getCost(), item.getStock(), item.getSellPrice()));
         }
         backupCSV.close();
+    }
+
+    /**
+     * A method for writing receipts to a txt file
+     *
+     * @param receipt the list of products being written to the csv file
+     * @throws IOException if the hardcoded file location doesn't exist (if this is thrown something is wrong)
+     */
+    public static void writetoTXT(Receipt receipt) throws IOException {
+        PrintWriter receiptTXT = new PrintWriter(new File(".\\main\\resources\\receipt.txt"));
+        receiptTXT.println(ReceiptUtil.toString(receipt));
+        receiptTXT.close();
     }
 }

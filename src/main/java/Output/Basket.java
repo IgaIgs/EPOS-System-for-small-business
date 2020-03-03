@@ -1,19 +1,21 @@
 package Output;
 
 import DbTables.Product;
+import DbTables.Receipt;
+import DbTables.PurchaseHistory;
 import java.util.*;
 import java.text.*;
 
 /**
- * Receipt object stores a basket of products in a HashMap with products as keys and quantity purchased as values
+ * Basket object stores a basket of products in a HashMap with products as keys and quantity purchased as values
  */
-public class Receipt {
+public class Basket {
     private Map<Product, Integer> basket;
 
     /**
      *  Creates an empty HashMap as the container for the receipt
      */
-    Receipt(){
+    Basket(){
         basket = new HashMap<>();
     }
 
@@ -118,74 +120,6 @@ public class Receipt {
     }
 
     /**
-     * Produce a string representation of the receipt
-     *
-     * @param cash the money taken from the customer
-     * @return a receipt as a string ready for printing
-     */
-    public String toString(double cash){
-        // Create a string builder object to store the receipt transcript in
-        StringBuilder transcript = new StringBuilder();
-
-        // Set shop name which will be printed at the top of the receipt
-        String shopName = "Tricky Trinkets";
-
-        // Get current date and time to display on the receipt
-        String currentDateTime = getDate();
-
-        // Initialise constants for formatting the receipt
-        String dashChar = "-";
-        String spaceChar = " ";
-        int lineLength = 43;
-
-        // Calculate totsl price to display on the receipt
-        double total = priceTotal();
-
-        // Create the divider line string which will be used to divide sections of the receipt
-        String divider = String.format("%s\n", dashChar.repeat(lineLength));
-
-        // Top of the receipt with the shop name, address, phone number and current date and time
-        transcript.append(divider);
-        transcript.append(String.format("%1$s%2$s%1$s\n", spaceChar.repeat(centerLineBuffer(lineLength, shopName.length())), shopName));
-        transcript.append(String.format("%1$s%2$s%1$s\n\n", spaceChar.repeat(centerLineBuffer(lineLength, currentDateTime.length())), currentDateTime));
-        transcript.append(String.format("Address: %s\n", "1 Village Road"));
-        transcript.append(String.format("Tel No: %s\n", "0123 456 7890"));
-
-        // Middle of receipt displaying products with their names on the left and prices on the right
-        transcript.append(divider);
-        transcript.append(String.format("%-36s %6s \n\n", "Description:", "Price:"));
-        for (Product item: basket.keySet()) {
-            for (int i = 0; i < basket.get(item); i++) {
-                transcript.append(String.format("%-36s %6.2d \n", item.getProdName(), item.getCost()));
-            }
-        }
-
-        // Bottom of the receipt shows total cost, cash given by customer and change given to customer
-        transcript.append(divider);
-        transcript.append(String.format("%-36s %6.2f \n", "Total:", total));
-        transcript.append(String.format("%d Items\n\n", basket.size()));
-        transcript.append(String.format("%-36s %6.2f \n", "Cash:", cash));
-        transcript.append(String.format("%-36s %6.2f \n", "Change:", (cash - total)));
-
-
-        transcript.append(divider);
-
-        // Convert to string and return
-        return transcript.toString();
-    }
-
-    /**
-     * Calculate the white space needed either side of a center-aligned word on the receipt
-     *
-     * @param lineLength the number of characters that can fit on one line in the receipt
-     * @param stringLength the length of the word that is being center-aligned
-     * @return the number of white space characters that need to be place before and after the word on the line in the receipt
-     */
-    private static int centerLineBuffer(int lineLength, int stringLength){
-        return (lineLength - stringLength) / 2;
-    }
-
-    /**
      * Return the date and time of when the receipt string is constructed
      *
      * @return the date and time of when the receipt string is constructed
@@ -193,5 +127,30 @@ public class Receipt {
     private static String getDate() {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         return dateFormat.format(new Date());
+    }
+
+    /**
+     * Convert to a receipt object in order to write to the database
+     *
+     * @param cash the money taken from the customer
+     * @return the basket in the form of a receipt
+     */
+    public Receipt toReceipt(double cash){
+        Receipt receipt = new Receipt();
+        double total = priceTotal();
+        receipt.setTotalc(total);
+        receipt.setDate(getDate());
+        receipt.setPaid(cash);
+        Set<PurchaseHistory> itemQuantityObjectSet = new HashSet<>();
+        for (Product item: basket.keySet()){
+            PurchaseHistory itemQuantityObject = new PurchaseHistory();
+            itemQuantityObject.setProduct(item);
+            itemQuantityObject.setReceipt(receipt);
+            itemQuantityObject.setQuantity(basket.get(item));
+            itemQuantityObjectSet.add(itemQuantityObject);
+        }
+        receipt.setProducts(itemQuantityObjectSet);
+        receipt.setChange(cash - total);
+        return receipt;
     }
 }
