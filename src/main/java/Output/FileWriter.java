@@ -20,7 +20,7 @@ public class FileWriter {
         PrintWriter backupCSV = new PrintWriter(new File(".\\main\\resources\\database_backup.csv"));
         backupCSV.println("id,name,category,perishable,cost,stock,sell_price");
         for (Product item: products) {
-            backupCSV.println(String.format("%d,%s,%s,%s,%d,%d,%d", item.getProductID(), item.getProdName(), item.getProdCat(), item.isPerishable(), item.getCost(), item.getStock(), item.getSellPrice()));
+            backupCSV.println(String.format("%s,%s,%s,%s,%f,%d,%f", item.getProductID(), item.getProdName(), item.getProdCat(), item.isPerishable(), item.getCost(), item.getStock(), item.getSell_price()));
         }
         backupCSV.close();
     }

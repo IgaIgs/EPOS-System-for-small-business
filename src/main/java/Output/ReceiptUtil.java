@@ -23,10 +23,19 @@ public class ReceiptUtil {
         // Initialise constants for formatting the receipt
         String dashChar = "-";
         String spaceChar = " ";
-        int lineLength = 43;
+        int lineLength = 45;
+        int priceSpaceLength = 7;
+        int productSpaceLength = lineLength - priceSpaceLength - 1;
+        String productSpace = "%-" + productSpaceLength + "s";
+        String priceSpace = "%" + priceSpaceLength + ".2f";
+        String configurableLineFormatTitle = productSpace + " " + "%" + priceSpaceLength +  "s \n\n";
+        String configurableLineFormat = productSpace + "%s" + priceSpace + " \n";
 
         // Calculate total price to display on the receipt
         double total = receipt.getTotalc();
+
+        // Set currency symbol
+        char currency = '£';
 
         // Calculate the number of items in the basket
         int basketSize = 0;
@@ -46,19 +55,19 @@ public class ReceiptUtil {
 
         // Middle of receipt displaying products with their names on the left and prices on the right
         transcript.append(divider);
-        transcript.append(String.format("%-36s %6s \n\n", "Description:", "Price:"));
+        transcript.append(String.format(configurableLineFormatTitle, "Description:", "Price:"));
         for (PurchaseHistory item: receipt.getProducts()) {
             for (int i = 0; i < item.getQuantity(); i++) {
-                transcript.append(String.format("%-36s %6.2f \n", item.getProduct().getProdName(), item.getProduct().getCost()));
+                transcript.append(String.format(configurableLineFormat, item.getProduct().getProdName(), currency, item.getProduct().getSell_price()));
             }
         }
 
         // Bottom of the receipt shows total cost, cash given by customer and change given to customer
         transcript.append(divider);
-        transcript.append(String.format("%-36s %6.2f \n", "Total:", total));
+        transcript.append(String.format(configurableLineFormat, "Total:", currency, total));
         transcript.append(String.format("%d Items\n\n", basketSize));
-        transcript.append(String.format("%-36s %6.2f \n", "Cash:", receipt.getPaid()));
-        transcript.append(String.format("%-36s %6.2f \n", "Change:", (receipt.getPaid() - total)));
+        transcript.append(String.format(configurableLineFormat, "Cash:", currency, receipt.getPaid()));
+        transcript.append(String.format(configurableLineFormat, "Change:", currency, (receipt.getPaid() - total)));
 
 
         transcript.append(divider);

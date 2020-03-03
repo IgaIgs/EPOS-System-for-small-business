@@ -64,11 +64,22 @@ public class Basket {
     /**
      * Add multiple different items to the basket
      *
-     * @param items a list of singular products to be added to the basket
+     * @param items a List of singular products to be added to the basket
      */
     public void add(List<Product> items) {
         for (Product item: items) {
             this.add(item);
+        }
+    }
+
+    /**
+     * Add several of multiple items
+     *
+     * @param items a Map containing products as keys and quantities as values
+     */
+    public void add(Map<Product, Integer> items) {
+        for (Product item: items.keySet()) {
+            this.add(item, items.get(item));
         }
     }
 
@@ -105,6 +116,28 @@ public class Basket {
     }
 
     /**
+     * Remove multiple different items from the basket
+     *
+     * @param items a List of singular products to be removed from the basket
+     */
+    public void remove(List<Product> items) {
+        for (Product item: items) {
+            this.remove(item);
+        }
+    }
+
+    /**
+     * Remove several of multiple items
+     *
+     * @param items a Map containing products as keys and quantities as values
+     */
+    public void remove(Map<Product, Integer> items) {
+        for (Product item : items.keySet()) {
+            this.remove(item, items.get(item));
+        }
+    }
+
+    /**
      * Return the current total price of the basket
      *
      * @return the total price of the current basket
@@ -113,10 +146,10 @@ public class Basket {
         double total = 0;
         for (Product item: basket.keySet()) {
             for (int i = 0; i < basket.get(item); i++){
-                total += item.getCost();
+                total += item.getSell_price();
             }
         }
-        return priceTotal();
+        return total;
     }
 
     /**
