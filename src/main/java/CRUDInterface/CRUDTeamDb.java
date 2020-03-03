@@ -1,6 +1,8 @@
 package CRUDInterface;
 
 import DbTables.Product;
+import DbTables.PurchaseHistory;
+import DbTables.Receipt;
 import csc1035.project3.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -30,7 +32,6 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
                 session.close();
             }
         }
-
     }
 
     @Override
@@ -84,15 +85,23 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
+            // use list of categories to convert ID from user to category name for query
             String cat = getCategories(session).get(userCat);
+            // get all items in category
             Query query = session.createQuery("select p.id, p.prodName from PRODUCTS p where p.prodCat = :new_cat");
             query.setParameter("new_cat", cat);
+
             List results = query.getResultList();
+            Object[] items = results.toArray();
 
-            for (Object i : results){
-                System.out.println(i.toString());
+            System.out.println("Items in category " + cat + ":");
+            for (int i = 0; i <items.length ; i++) {
+                Object[] tmp = (Object[]) items[i];
+                for (int j = 0; j < tmp.length ; j++) {
+                    System.out.print(tmp[j]+" ");
+                }
+                System.out.println();
             }
-
 
             session.getTransaction().commit();
         } catch (HibernateException ex) {
@@ -104,12 +113,16 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             }
         }
     }
-//TODO for Ben: make the getCategories and readProduct collaboration work
+
     private List<String> getCategories(Session session){
         List results = null;
-
+        // get list of categories so user can select a category to then browse items from
         Query query = session.createQuery("select distinct p.prodCat from PRODUCTS p");
+
         results = query.getResultList();
+        for (Object i : results){
+            System.out.println(i.toString());
+        }
         return results;
     }
 
@@ -218,4 +231,42 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             }
         }
     }
+
+    public void sellItem(int id, int qty, double paid){
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+
+            // query to get current stock of given item
+            Query getStock = session.createQuery("SELECT p.stock FROM PRODUCTS p WHERE p.id = :prod_id");
+            getStock.setParameter("prod_id", id);
+            List stockResults = getStock.getResultList();
+            int productStock = (int) stockResults.get(0);
+
+            // then update stock by subtracting the quantity of items sold
+            Query updateStock = session.createQuery("UPDATE PRODUCTS p SET p.stock = :new_stock WHERE p.id = :prod_id");
+            updateStock.setParameter("prod_id", id);
+            updateStock.setParameter("new_stock", productStock - qty);
+            updateStock.executeUpdate();
+
+            // TODO need to make these types work (currently also hard coding values in attempt to test it out)
+            Product tempProduct = session.get(Product.class, id);
+            Receipt tempReceipt = new Receipt(paid, "2020-03-03", paid);
+            PurchaseHistory purchaseHistory = new PurchaseHistory(tempProduct, tempReceipt, qty);
+            Query updatePurchaseHistory = session.createQuery("INSERT INTO PURCHASE_HISTORY (productID, receiptID, Quantity) SELECT p.productID, r.receiptID, p.stock FROM PRODUCTS p, RECEIPTS r");
+            updatePurchaseHistory.executeUpdate();
+
+            session.getTransaction().commit();
+        } catch (HibernateException ex) {
+            if (session!=null) session.getTransaction().rollback();
+            ex.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
+
+
 }

@@ -56,6 +56,7 @@ public  interface CRUDInterface<E>  {
      */
     void delete(Class<E> c, String id);
 
+    void sellItem(int id, int qty, double paid);
 
 }
 
