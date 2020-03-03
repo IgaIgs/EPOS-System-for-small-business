@@ -25,7 +25,7 @@ public class ReceiptUtil {
         String spaceChar = " ";
         int lineLength = 43;
 
-        // Calculate totsl price to display on the receipt
+        // Calculate total price to display on the receipt
         double total = receipt.getTotalc();
 
         // Calculate the number of items in the basket
@@ -58,7 +58,7 @@ public class ReceiptUtil {
         transcript.append(String.format("%-36s %6.2f \n", "Total:", total));
         transcript.append(String.format("%d Items\n\n", basketSize));
         transcript.append(String.format("%-36s %6.2f \n", "Cash:", receipt.getPaid()));
-        transcript.append(String.format("%-36s %6.2f \n", "Change:", receipt.getChange()));
+        transcript.append(String.format("%-36s %6.2f \n", "Change:", (receipt.getPaid() - total)));
 
 
         transcript.append(divider);

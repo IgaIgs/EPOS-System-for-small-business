@@ -150,7 +150,6 @@ public class Basket {
             itemQuantityObjectSet.add(itemQuantityObject);
         }
         receipt.setProducts(itemQuantityObjectSet);
-        receipt.setChange(cash - total);
         return receipt;
     }
 }
