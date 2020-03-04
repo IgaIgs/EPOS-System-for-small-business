@@ -6,8 +6,8 @@ import DbTables.Receipt;
 import csc1035.project3.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.annotations.NamedNativeQuery;
 import org.hibernate.query.Query;
-
 
 import java.util.HashMap;
 import java.util.List;
@@ -249,12 +249,26 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             updateStock.setParameter("new_stock", productStock - qty);
             updateStock.executeUpdate();
 
-            // TODO need to make these types work (currently also hard coding values in attempt to test it out)
+            // TODO I think we need to execute transactions all at once, otherwise it might perform half and adjust stock but fail something else etc
+
+            // add receipt to receipts table
             Product tempProduct = session.get(Product.class, id);
             Receipt tempReceipt = new Receipt(paid, "2020-03-03", paid);
-            PurchaseHistory purchaseHistory = new PurchaseHistory(tempProduct, tempReceipt, qty);
-            Query updatePurchaseHistory = session.createQuery("INSERT INTO PURCHASE_HISTORY (productID, receiptID, Quantity) SELECT p.productID, r.receiptID, p.stock FROM PRODUCTS p, RECEIPTS r");
-            updatePurchaseHistory.executeUpdate();
+            Query insertReceipt = session.createNativeQuery("INSERT INTO RECEIPTS (ReceiptID, Date, Money_Given, Total_cost) VALUES (?,?,?,?)");
+            insertReceipt.setParameter(1, tempReceipt.getReceiptID());
+            insertReceipt.setParameter(2, tempReceipt.getDate());
+            insertReceipt.setParameter(3, paid);
+            insertReceipt.setParameter(4, qty * tempProduct.getSell_price());
+            insertReceipt.executeUpdate();
+            // TODO need to check calculation in param4 actually works, I'm not certain but we'll see
+            // TODO change receipt table not to include calculated values - but for now I wanna test it!
+            
+            //PurchaseHistory purchaseHistory = new PurchaseHistory(tempProduct, tempReceipt, qty);
+            Query insertPurchaseHistoryNative = session.createNativeQuery("INSERT INTO PURCHASE_HISTORY (productId, receiptID, Quantity) VALUES (?,?,?)");
+            insertPurchaseHistoryNative.setParameter(1, id);
+            insertPurchaseHistoryNative.setParameter(2, tempReceipt.getReceiptID());
+            insertPurchaseHistoryNative.setParameter(3, productStock - qty);
+            insertPurchaseHistoryNative.executeUpdate();
 
             session.getTransaction().commit();
         } catch (HibernateException ex) {
