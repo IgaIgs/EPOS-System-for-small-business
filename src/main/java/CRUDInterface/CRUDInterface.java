@@ -1,7 +1,5 @@
 package CRUDInterface;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public  interface CRUDInterface<E>  {
@@ -25,20 +23,6 @@ public  interface CRUDInterface<E>  {
      */
     void readProduct(int userCat);
 
-    /**
-     * Return an arraylist with all entry's fields in order given its ID
-     * @param id - what is the ID of the entry
-     * @return - an arraylist
-     */
-    void readProdById(String id);
-
-    /**
-     *  read by Id from Jordan which returns object representations of entries in the table
-     * @param c - which table
-     * @param id - entry id
-     * @return - the entry
-     */
-    E readByIdReturnE(Class<E> c, String id);
 
     /**
      * method for product table to enable looking for product iDs using their names
@@ -47,8 +31,8 @@ public  interface CRUDInterface<E>  {
      */
     String readByProdNameReturnId(String name);
 
-    List<E> readAll(Class<E> c);
     List<String> getCategories();
+
     void printCategories(List<String> categories);
 
     /**
