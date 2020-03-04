@@ -27,9 +27,10 @@ public class CRUDRunner {
 //        cI.generalUpdate(purchaseHistory);
 
 
-        //cI.readProdById("rammTeq");
-        cI.printCategories(cI.getCategories());
-        cI.readProduct(0);
+        //cI.printCategories(cI.getCategories());
+        //cI.readProduct(0);
+
+        cI.readByProdNameReturnId("ramm");
 
 
         //Receipt ringNteq = new Receipt(287.95, "01/03/2020",290.00);
@@ -37,8 +38,6 @@ public class CRUDRunner {
         //cI.sellItem(5, 1, 1000);
 
 
-        //System.out.println(cI.readAll(Product.class));
-        //System.out.println(cI.readByIdReturnE(Product.class, "p2"));
 
 
     }
