@@ -35,15 +35,13 @@ public class ReceiptUtil {
         int productSpaceLength = lineLength - priceSpaceLength - 1;
 
         // Calculate width required to fit the price if the price is longer than 7 characters
-        for (PurchaseHistory item: receipt.getProducts()) {
-            if (Math.floor(Math.log(item.getProduct().getSell_price())) > priceSpaceLength) {
-                priceSpaceLength = (int) Math.floor(Math.log(item.getProduct().getSell_price()));
-            }
+        if ((Math.floor(Math.log(receipt.getPaid())) + 1) > priceSpaceLength) {
+            priceSpaceLength = (int) Math.floor(Math.log(receipt.getPaid())) + 1;
         }
-
-        // Also factor in the amount the customer paid into this calculation
-        if (Math.floor(Math.log(receipt.getPaid())) > priceSpaceLength) {
-            priceSpaceLength = (int) Math.floor(Math.log(receipt.getPaid())) - 3;
+        for (PurchaseHistory item: receipt.getProducts()) {
+            if ((Math.floor(Math.log(item.getProduct().getSell_price())) + 1) > priceSpaceLength) {
+                priceSpaceLength = (int) Math.floor(Math.log(item.getProduct().getSell_price())) + 1;
+            }
         }
 
         // Calculate width required to fit the product name if the product name is longer than 37 characters
