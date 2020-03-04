@@ -2,6 +2,8 @@ package Output;
 
 import DbTables.Receipt;
 import DbTables.PurchaseHistory;
+import java.lang.*;
+
 
 public class ReceiptUtil {
     /**
@@ -20,22 +22,48 @@ public class ReceiptUtil {
         // Get current date and time to display on the receipt
         String currentDateTime = receipt.getDate();
 
-        // Initialise constants for formatting the receipt
+        // Set currency symbol
+        char currency = '£';
+
+        // Create character strings to use in the formatting of the receipt
         String dashChar = "-";
         String spaceChar = " ";
+
+        // Initialise default widths for formatting the receipt
         int lineLength = 45;
         int priceSpaceLength = 7;
         int productSpaceLength = lineLength - priceSpaceLength - 1;
+
+        // Calculate width required to fit the price if the price is longer than 7 characters
+        for (PurchaseHistory item: receipt.getProducts()) {
+            if (Math.floor(Math.log(item.getProduct().getSell_price())) > priceSpaceLength) {
+                priceSpaceLength = (int) Math.floor(Math.log(item.getProduct().getSell_price()));
+            }
+        }
+
+        // Also factor in the amount the customer paid into this calculation
+        if (Math.floor(Math.log(receipt.getPaid())) > priceSpaceLength) {
+            priceSpaceLength = (int) Math.floor(Math.log(receipt.getPaid())) - 3;
+        }
+
+        // Calculate width required to fit the product name if the product name is longer than 37 characters
+        for (PurchaseHistory item: receipt.getProducts()) {
+            if (item.getProduct().getProdName().length() > (productSpaceLength - 2)) {
+                productSpaceLength = item.getProduct().getProdName().length() + 2;
+            }
+        }
+
+        // Re-calculate line length
+        lineLength = productSpaceLength + priceSpaceLength + 1;
+
+        // Create formats for format strings using the variable widths
         String productSpace = "%-" + productSpaceLength + "s";
         String priceSpace = "%" + priceSpaceLength + ".2f";
-        String configurableLineFormatTitle = productSpace + " " + "%" + priceSpaceLength +  "s \n\n";
-        String configurableLineFormat = productSpace + "%s" + priceSpace + " \n";
+        String configurableLineFormatTitle = productSpace + " %" + priceSpaceLength +  "s \n\n";
+        String configurableLineFormat = productSpace + currency + priceSpace + " \n";
 
         // Calculate total price to display on the receipt
         double total = receipt.getTotalc();
-
-        // Set currency symbol
-        char currency = '£';
 
         // Calculate the number of items in the basket
         int basketSize = 0;
@@ -58,16 +86,16 @@ public class ReceiptUtil {
         transcript.append(String.format(configurableLineFormatTitle, "Description:", "Price:"));
         for (PurchaseHistory item: receipt.getProducts()) {
             for (int i = 0; i < item.getQuantity(); i++) {
-                transcript.append(String.format(configurableLineFormat, item.getProduct().getProdName(), currency, item.getProduct().getSell_price()));
+                transcript.append(String.format(configurableLineFormat, item.getProduct().getProdName(), item.getProduct().getSell_price()));
             }
         }
 
         // Bottom of the receipt shows total cost, cash given by customer and change given to customer
         transcript.append(divider);
-        transcript.append(String.format(configurableLineFormat, "Total:", currency, total));
+        transcript.append(String.format(configurableLineFormat, "Total:", total));
         transcript.append(String.format("%d Items\n\n", basketSize));
-        transcript.append(String.format(configurableLineFormat, "Cash:", currency, receipt.getPaid()));
-        transcript.append(String.format(configurableLineFormat, "Change:", currency, (receipt.getPaid() - total)));
+        transcript.append(String.format(configurableLineFormat, "Cash:", receipt.getPaid()));
+        transcript.append(String.format(configurableLineFormat, "Change:", (receipt.getPaid() - total)));
 
 
         transcript.append(divider);
