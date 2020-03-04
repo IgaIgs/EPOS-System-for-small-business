@@ -7,8 +7,6 @@ import csc1035.project3.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-
-
 import java.util.List;
 
 // This class will contain all the CRUD methods and use the CRUD interface
@@ -242,9 +240,5 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
                 session.close();
             }
         }
-
     }
-
-
-
 }
