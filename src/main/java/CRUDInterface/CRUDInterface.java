@@ -48,6 +48,8 @@ public  interface CRUDInterface<E>  {
     String readByProdNameReturnId(String name);
 
     List<E> readAll(Class<E> c);
+    List<String> getCategories();
+    void printCategories(List<String> categories);
 
     /**
      * delete by id. Doesn't work on Purchase History table where there is no id but two foreign keys

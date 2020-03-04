@@ -6,10 +6,9 @@ import DbTables.Receipt;
 import csc1035.project3.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.annotations.NamedNativeQuery;
 import org.hibernate.query.Query;
 
-import java.util.HashMap;
+
 import java.util.List;
 
 // This class will contain all the CRUD methods and use the CRUD interface
@@ -81,12 +80,12 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
      */
     @Override
     public void readProduct(int userCat) {
-        // TODO make sure input class provides int  using next.int
+        // TODO make sure to remind Yayu input class provides int  using next.int
         try {
+            String cat = getCategories().get(userCat);
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             // use list of categories to convert ID from user to category name for query
-            String cat = getCategories(session).get(userCat);
             // get all items in category
             Query query = session.createQuery("select p.id, p.prodName from PRODUCTS p where p.prodCat = :new_cat");
             query.setParameter("new_cat", cat);
@@ -102,7 +101,6 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
                 }
                 System.out.println();
             }
-
             session.getTransaction().commit();
         } catch (HibernateException ex) {
             if (session!=null) session.getTransaction().rollback();
@@ -114,17 +112,39 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         }
     }
 
-    private List<String> getCategories(Session session){
-        List results = null;
-        // get list of categories so user can select a category to then browse items from
-        Query query = session.createQuery("select distinct p.prodCat from PRODUCTS p");
+    @Override
+    public List<String> getCategories(){
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
 
-        results = query.getResultList();
-        for (Object i : results){
-            System.out.println(i.toString());
+            List results = null;
+            // get list of categories so user can select a category to then browse items from
+            Query query = session.createQuery("select distinct p.prodCat from PRODUCTS p");
+            results = query.getResultList();
+
+            session.getTransaction().commit();
+            return results;
+        } catch (HibernateException ex) {
+            if (session!=null) session.getTransaction().rollback();
+            ex.printStackTrace();
+            return null;
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
-        return results;
     }
+
+    // TODO 4 Ben: add some comments
+    @Override
+    public void printCategories(List<String> categories){
+        System.out.println("Available categories:");
+        for (int i = 0; i<categories.size(); i++){
+            System.out.println(i + " - " + categories.get(i).toString());
+        }
+    }
+
 
     @Override
     public void readProdById(String id) {
@@ -242,6 +262,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             getStock.setParameter("prod_id", id);
             List stockResults = getStock.getResultList();
             int productStock = (int) stockResults.get(0);
+            // TODO 4 Ben: don't sell an item if stock = 0
 
             // then update stock by subtracting the quantity of items sold
             Query updateStock = session.createQuery("UPDATE PRODUCTS p SET p.stock = :new_stock WHERE p.id = :prod_id");
@@ -249,27 +270,36 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             updateStock.setParameter("new_stock", productStock - qty);
             updateStock.executeUpdate();
 
-            // TODO I think we need to execute transactions all at once, otherwise it might perform half and adjust stock but fail something else etc
+            // TODO 4 Ben: I think we need to execute transactions all at once, otherwise it might perform half and adjust stock but fail something else etc
 
             // add receipt to receipts table
             Product tempProduct = session.get(Product.class, id);
-            Receipt tempReceipt = new Receipt(paid, "2020-03-03", paid);
-            Query insertReceipt = session.createNativeQuery("INSERT INTO RECEIPTS (ReceiptID, Date, Money_Given, Total_cost) VALUES (?,?,?,?)");
-            insertReceipt.setParameter(1, tempReceipt.getReceiptID());
-            insertReceipt.setParameter(2, tempReceipt.getDate());
-            insertReceipt.setParameter(3, paid);
-            insertReceipt.setParameter(4, qty * tempProduct.getSell_price());
-            insertReceipt.executeUpdate();
-            // TODO need to check calculation in param4 actually works, I'm not certain but we'll see
-            // TODO change receipt table not to include calculated values - but for now I wanna test it!
-            
-            //PurchaseHistory purchaseHistory = new PurchaseHistory(tempProduct, tempReceipt, qty);
-            Query insertPurchaseHistoryNative = session.createNativeQuery("INSERT INTO PURCHASE_HISTORY (productId, receiptID, Quantity) VALUES (?,?,?)");
-            insertPurchaseHistoryNative.setParameter(1, id);
-            insertPurchaseHistoryNative.setParameter(2, tempReceipt.getReceiptID());
-            insertPurchaseHistoryNative.setParameter(3, productStock - qty);
-            insertPurchaseHistoryNative.executeUpdate();
+            Receipt tempReceipt = new Receipt(qty * tempProduct.getSell_price(), "2020-03-03", paid);
+            session.saveOrUpdate(tempReceipt);
+            session.getTransaction().commit();
 
+            // TODO 4 Ben: need to check calculation in param4 actually works, I'm not certain but we'll see
+            // TODO 4 Ben: get rid of ugly hard coded values already
+            generatePurchaseHistoryRecord(tempProduct, tempReceipt, qty);
+
+        } catch (HibernateException ex) {
+            if (session!=null) session.getTransaction().rollback();
+            ex.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+    private void generatePurchaseHistoryRecord (Product product, Receipt receipt, int qty){
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+
+            PurchaseHistory purchaseHistory = new PurchaseHistory(product, receipt, qty);
+            // TODO 4 Ben:  please run a few basic tests to be sure that qty is working
+
+            session.saveOrUpdate(purchaseHistory);
             session.getTransaction().commit();
         } catch (HibernateException ex) {
             if (session!=null) session.getTransaction().rollback();
@@ -279,6 +309,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
                 session.close();
             }
         }
+
     }
 
 
