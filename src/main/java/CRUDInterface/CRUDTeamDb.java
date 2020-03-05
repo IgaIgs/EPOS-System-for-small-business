@@ -55,7 +55,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             Query query = session.createQuery("update PRODUCTS p set p.prodName = :new_name, p.prodCat = :new_cat, " +
-                "p.cost = :new_cost, p.stock = :new_stock, p.sell_price = :new_sellP where p.id = :prod_id ");
+                "p.cost = :new_cost, p.stock = :new_stock, p.sell_price = :new_sellP where p.id = :prod_id");
             query.setParameter("new_name",list.get(1));
             query.setParameter("new_cat",list.get(2));
             query.setParameter("new_cost",list.get(4));
@@ -177,14 +177,18 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         }
     }
 
+    /**
+     * Iga: This method deletes a product from the database by setting its stock to 0 (cuz key constraints)
+     * @param id - product id
+     */
     @Override
-    public void delete(Class c, String id) {
+    public void delete(int id) {
 
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
-            Object entry = c.cast(session.get(c, id));
-            session.delete(entry);
+            Query query = session.createQuery("update PRODUCTS p set p.stock = 0 where p.id = id");
+            query.executeUpdate();
             session.getTransaction().commit();
         } catch (HibernateException ex) {
             if (session!=null) session.getTransaction().rollback();

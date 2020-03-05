@@ -36,11 +36,10 @@ public  interface CRUDInterface<E>  {
     void printCategories(List<String> categories);
 
     /**
-     * delete by id. Doesn't work on Purchase History table where there is no id but two foreign keys
-     * @param c - which classs/table to delete from
-     * @param id - id of the entry to be deleted
+     * "delete" a product from the database by setting its stock to 0
+     * @param id - product id
      */
-    void delete(Class<E> c, String id);
+    void delete(int id);
 
     void sellItem(int id, int qty, double paid);
 
