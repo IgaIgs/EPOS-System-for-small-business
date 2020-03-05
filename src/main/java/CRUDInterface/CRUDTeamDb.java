@@ -139,27 +139,42 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
     public void printCategories(List<String> categories){
         System.out.println("Available categories:");
         for (int i = 0; i<categories.size(); i++){
-            System.out.println(i + " - " + categories.get(i).toString());
+            System.out.println(i + " - " + categories.get(i));
         }
     }
 
-    // TODO 4 Iga: make the method take a name and return id
+    /**
+     * Iga: This method takes a full or partial name of a product and prints out the FULL product name
+     * followed by this product's ID
+     * @param name - the full or partial name of a product the user looks for
+     */
     @Override
-    public String readByProdNameReturnId(String name) {
-        return null;
-//        Product prod = null;
-//        try {
-//            session = HibernateUtil.getSessionFactory().openSession();
-//            session.beginTransaction();
-//            List products = session.createQuery("FROM PRODUCTS P WHERE P.prodName = name").list();
-//            System.out.println("Name: " + prod.getProductID());
-//            session.getTransaction().commit();
-//        } catch (HibernateException e) {
-//            if (session!=null) session.getTransaction().rollback();
-//            e.printStackTrace();
-//        } finally {
-//            session.close();
-//        }
+    public void readByProdNameReturnId(String name) {
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            // find the id's of all the products whose names contain what the user inputted
+            Query query = session.createQuery("SELECT P.id FROM PRODUCTS P WHERE P.prodName LIKE :try_name");
+            // find the full names of all the products whose names contain what the user inputted
+            Query query1 = session.createQuery("SELECT P.prodName FROM PRODUCTS P WHERE P.prodName LIKE :try_name");
+            // set the variable try_name from both queries to user input
+            query.setParameter("try_name", "%" + name + "%");
+            query1.setParameter("try_name", "%" + name + "%");
+            // save results of both queries in 2 different lists (of the same length)
+            List productNms = query1.getResultList();
+            List productIDs = query.getResultList();
+            session.getTransaction().commit();
+            // iterate through the result lists
+            for (int i = 0; i < productIDs.size(); i++){
+                // print out the full names and IDs of found products
+                System.out.println("Product name: " + productNms.get(i) + " --> Product ID: " + productIDs.get(i));
+            }
+        } catch (HibernateException e) {
+            if (session!=null) session.getTransaction().rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
     }
 
     @Override

@@ -29,7 +29,7 @@ public  interface CRUDInterface<E>  {
      * @param name - entry id
      * @return - name of the product
      */
-    String readByProdNameReturnId(String name);
+    void readByProdNameReturnId(String name);
 
     List<String> getCategories();
 
