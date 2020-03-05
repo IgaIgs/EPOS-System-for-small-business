@@ -59,6 +59,16 @@ public class Tests {
          * used on stock levels.
          * We will need to call it several times to prove we can update the stock levels of various items.
          */
+        
+        //Selling wrong amounts of items (negative)
+
+        //IDs that don't exist
+
+        //Not enough money
+
+        //Being able to sell multiple items at once
+
+        //Not enough stock to sell
 
         //We will close our session after all our tests have ran.
         session.close();
