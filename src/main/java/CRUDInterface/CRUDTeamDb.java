@@ -53,19 +53,21 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         }
     }
 
+    /**
+     * Method to update an attribute for given product
+     * @param id - id of item to be updated
+     * @param field - the field to be updated
+     * @param newValue - the new value to be inserted
+     */
     @Override
-    public void updateProduct(int id) {
+    public void updateProduct(int id, String field, String newValue) {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
-            Query query = session.createQuery("update PRODUCTS p set p.prodName = :new_name, p.prodCat = :new_cat, " +
-                "p.cost = :new_cost, p.stock = :new_stock, p.sell_price = :new_sellP where p.id = :prod_id");
-            query.setParameter("new_name",list.get(1));
-            query.setParameter("new_cat",list.get(2));
-            query.setParameter("new_cost",list.get(4));
-            query.setParameter("new_stock",list.get(5));
-            query.setParameter("new_sellP",list.get(6));
-            query.executeUpdate();
+            // create query using strings, so that fields can be supplied by user
+            String updateString = "UPDATE PRODUCTS p SET " + field +" = "+newValue+" WHERE p.id = "+id;
+            Query update = session.createQuery(updateString);
+            update.executeUpdate();
             session.getTransaction().commit();
         } catch (HibernateException ex) {
             if (session!=null) session.getTransaction().rollback();
