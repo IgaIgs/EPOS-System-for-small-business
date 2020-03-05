@@ -285,4 +285,22 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             }
         }
     }
+
+    public int getStock(int id){
+        session = HibernateUtil.getSessionFactory().openSession();
+        session.beginTransaction();
+        Product tempProduct = session.get(Product.class, id);
+
+        Query getStock = session.createQuery("SELECT p.stock FROM PRODUCTS p WHERE p.id = :prod_id");
+        getStock.setParameter("prod_id", id);
+        List stockResults = getStock.getResultList();
+        int productStock = (int) stockResults.get(0);
+        if (productStock == 0){
+            // do not return ID if item is out of stock
+            System.out.println("Error: " + tempProduct.getProdName() + " is no longer in stock.");
+            return -1;
+        }
+        return productStock;
+    }
+
 }
