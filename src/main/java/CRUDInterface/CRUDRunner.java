@@ -29,8 +29,8 @@ public class CRUDRunner {
 
         //cI.printCategories(cI.getCategories());
         //cI.readProduct(0);
-
-        cI.readByProdNameReturnId("ramm");
+        cI.readProduct(0);
+        //cI.readByProdNameReturnId("ramm");
 
 
         //Receipt ringNteq = new Receipt(287.95, "01/03/2020",290.00);

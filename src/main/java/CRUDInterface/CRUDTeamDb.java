@@ -92,12 +92,10 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             Object[] items = results.toArray();
 
             System.out.println("Items in category " + cat + ":");
+            System.out.println("Number --> Category" );
             for (int i = 0; i <items.length ; i++) {
                 Object[] tmp = (Object[]) items[i];
-                for (int j = 0; j < tmp.length ; j++) {
-                    System.out.print(tmp[j]+" ");
-                }
-                System.out.println();
+                System.out.println(tmp[0] + "\t   --> " + tmp[1]);
             }
             session.getTransaction().commit();
         } catch (HibernateException ex) {
@@ -138,8 +136,9 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
     @Override
     public void printCategories(List<String> categories){
         System.out.println("Available categories:");
+        System.out.println("Number --> Category" );
         for (int i = 0; i<categories.size(); i++){
-            System.out.println(i + " - " + categories.get(i));
+            System.out.println(i + " \t   --> " + categories.get(i));
         }
     }
 
@@ -165,9 +164,10 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             List productIDs = query.getResultList();
             session.getTransaction().commit();
             // iterate through the result lists
+            System.out.println("ID     --> Category" );
             for (int i = 0; i < productIDs.size(); i++){
                 // print out the full names and IDs of found products
-                System.out.println("Product name: " + productNms.get(i) + " --> Product ID: " + productIDs.get(i));
+                System.out.println(productIDs.get(i) + " \t   --> " + productNms.get(i));
             }
         } catch (HibernateException e) {
             if (session!=null) session.getTransaction().rollback();
