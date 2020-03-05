@@ -10,8 +10,9 @@ import java.util.Set;
 public class Product {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ProductID", updatable = false, nullable = false)
-    private String productID;
+    private int productID;
 
     @Column(name = "Name")
     private String prodName;
@@ -35,8 +36,7 @@ public class Product {
     private Set<PurchaseHistory> receipts = new HashSet<>();
 
 
-    public Product(String productID, String prodName, String prodCat, boolean perishable, double cost, int stock, double sell_price) {
-        this.productID = productID;
+    public Product(String prodName, String prodCat, boolean perishable, double cost, int stock, double sell_price) {
         this.prodName = prodName;
         this.prodCat = prodCat;
         this.perishable = perishable;
@@ -47,11 +47,11 @@ public class Product {
 
     public Product(){}
 
-    public String getProductID() {
+    public int getProductID() {
         return productID;
     }
 
-    public void setProductID(String productID) {
+    public void setProductID(int productID) {
         productID = productID;
     }
 
