@@ -7,6 +7,10 @@ import csc1035.project3.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 // This class will contain all the CRUD methods and use the CRUD interface
@@ -235,11 +239,13 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             updateStock.executeUpdate();
 
             // add receipt to receipts table
-            Receipt tempReceipt = new Receipt(qty * tempProduct.getSell_price(), "2020-03-03", paid);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            String date = new Date().toString();
+            Receipt tempReceipt = new Receipt(qty * tempProduct.getSell_price(), date, paid);
             session.saveOrUpdate(tempReceipt);
             session.getTransaction().commit();
 
-            // TODO 4 Ben: get rid of ugly hard coded values already
+            // call method to add record in link table
             generatePurchaseHistoryRecord(tempProduct, tempReceipt, qty);
 
         } catch (HibernateException ex) {
