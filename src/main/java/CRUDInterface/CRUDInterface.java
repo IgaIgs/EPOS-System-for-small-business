@@ -43,5 +43,6 @@ public  interface CRUDInterface<E>  {
 
     void sellItem(int id, int qty, double paid);
 
+    int getStock(int id);
 }
 

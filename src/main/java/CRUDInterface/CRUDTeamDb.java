@@ -224,20 +224,10 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             session.beginTransaction();
             Product tempProduct = session.get(Product.class, id);
 
-            // query to get current stock of given item
-            Query getStock = session.createQuery("SELECT p.stock FROM PRODUCTS p WHERE p.id = :prod_id");
-            getStock.setParameter("prod_id", id);
-            List stockResults = getStock.getResultList();
-            int productStock = (int) stockResults.get(0);
-            if (productStock == 0){
-                System.out.println("Error: " + tempProduct.getProdName() + " is no longer in stock.");
-                return;
-            }
-
             // then update stock by subtracting the quantity of items sold
             Query updateStock = session.createQuery("UPDATE PRODUCTS p SET p.stock = :new_stock WHERE p.id = :prod_id");
             updateStock.setParameter("prod_id", id);
-            updateStock.setParameter("new_stock", productStock - qty);
+            updateStock.setParameter("new_stock", getStock(id) - qty);
             updateStock.executeUpdate();
 
             // add receipt to receipts table
@@ -284,5 +274,26 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
                 session.close();
             }
         }
+    }
+
+    /**
+     * gets stock from id
+     * @param id - id (from products table) of product to query
+     * @return - the stock (as int)
+     */
+    public int getStock(int id){
+        session = HibernateUtil.getSessionFactory().openSession();
+        session.beginTransaction();
+        Product tempProduct = session.get(Product.class, id);
+        
+        Query getStock = session.createQuery("SELECT p.stock FROM PRODUCTS p WHERE p.id = :prod_id");
+        getStock.setParameter("prod_id", id);
+        List stockResults = getStock.getResultList();
+        int productStock = (int) stockResults.get(0);
+        if (productStock == 0){
+            System.out.println("Error: " + tempProduct.getProdName() + " is no longer in stock.");
+            return -1;
+        }
+        return productStock;
     }
 }
