@@ -50,7 +50,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
     }
 
     @Override
-    public void updateProduct(List<E> list, String id) {
+    public void updateProduct(int id) {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
@@ -78,7 +78,6 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
      */
     @Override
     public void readProduct(int userCat) {
-        // TODO make sure to remind Yayu input class provides int  using next.int
         try {
             String cat = getCategories().get(userCat);
             session = HibernateUtil.getSessionFactory().openSession();
@@ -132,12 +131,16 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         }
     }
 
-    // TODO 4 Ben: add some comments
+    /**
+     * Prints categories and their corresponding IDs to console to prompt user input
+     * @param categories - a list of all categories in products table
+     */
     @Override
     public void printCategories(List<String> categories){
         System.out.println("Available categories:");
         System.out.println("Number --> Category" );
         for (int i = 0; i<categories.size(); i++){
+            // format consistently to help user quickly find correct ID
             System.out.println(i + " \t   --> " + categories.get(i));
         }
     }
@@ -196,18 +199,30 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         }
     }
 
+    /**
+     * When an item is sold, updates stock in database accordingly
+     * Also generates receipt in receipts table
+     * Then calls generatePurchaseHistoryRecord to make record in link table
+     * @param id - ID of product (from products table) that is to be sold
+     * @param qty - quantity of that product being sold
+     */
+    // TODO 4 Ben : you need to move paid to a new method which loops through basket when checkout is selected
     @Override
     public void sellItem(int id, int qty, double paid){
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
+            Product tempProduct = session.get(Product.class, id);
 
             // query to get current stock of given item
             Query getStock = session.createQuery("SELECT p.stock FROM PRODUCTS p WHERE p.id = :prod_id");
             getStock.setParameter("prod_id", id);
             List stockResults = getStock.getResultList();
             int productStock = (int) stockResults.get(0);
-            // TODO 4 Ben: don't sell an item if stock = 0
+            if (productStock == 0){
+                System.out.println("Error: " + tempProduct.getProdName() + " is no longer in stock.");
+                return;
+            }
 
             // then update stock by subtracting the quantity of items sold
             Query updateStock = session.createQuery("UPDATE PRODUCTS p SET p.stock = :new_stock WHERE p.id = :prod_id");
@@ -215,15 +230,11 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             updateStock.setParameter("new_stock", productStock - qty);
             updateStock.executeUpdate();
 
-            // TODO 4 Ben: I think we need to execute transactions all at once, otherwise it might perform half and adjust stock but fail something else etc
-
             // add receipt to receipts table
-            Product tempProduct = session.get(Product.class, id);
             Receipt tempReceipt = new Receipt(qty * tempProduct.getSell_price(), "2020-03-03", paid);
             session.saveOrUpdate(tempReceipt);
             session.getTransaction().commit();
 
-            // TODO 4 Ben: need to check calculation in param4 actually works, I'm not certain but we'll see
             // TODO 4 Ben: get rid of ugly hard coded values already
             generatePurchaseHistoryRecord(tempProduct, tempReceipt, qty);
 
@@ -237,13 +248,19 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         }
     }
 
+    /**
+     * Creates record in link table from a transaction
+     * This allows for receipts to be reconstructed later
+     * @param product - the product involved in transaction
+     * @param receipt - the receipt involved in transaction
+     * @param qty - the number sold in that transaction
+     */
     private void generatePurchaseHistoryRecord (Product product, Receipt receipt, int qty){
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
 
             PurchaseHistory purchaseHistory = new PurchaseHistory(product, receipt, qty);
-            // TODO 4 Ben:  please run a few basic tests to be sure that qty is working
 
             session.saveOrUpdate(purchaseHistory);
             session.getTransaction().commit();
