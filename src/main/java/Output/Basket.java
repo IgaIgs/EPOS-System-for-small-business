@@ -39,7 +39,6 @@ public class Basket {
         } else {
             basket.put(item, 1);
         }
-        // TODO update stock method - decrement stock by 1
     }
 
     /**
@@ -58,7 +57,6 @@ public class Basket {
                 basket.put(item, quantity);
             }
         }
-        // TODO update stock method - decrement stock by quantity
     }
 
     /**
@@ -94,7 +92,6 @@ public class Basket {
         } else if (basket.containsKey(item) && (basket.get(item) == 1)) {
             basket.remove(item);
         }
-        // TODO update stock method - increment stock by 1
     }
 
     /**
@@ -112,7 +109,6 @@ public class Basket {
         } else if (basket.containsKey(item) && ((basket.get(item) - quantity) == 0)) {
             basket.remove(item);
         }
-        // TODO update stock method - increment stock by quantity
     }
 
     /**
