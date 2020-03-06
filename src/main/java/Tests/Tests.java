@@ -6,70 +6,70 @@ import DbTables.Product;
 
 public class Tests {
     public static void main(String[] args) {
+
         //We will open our session at the start of this main so all our products access our DB.
         Session session = HibernateUtil.getSessionFactory().openSession();
         CRUDInterface cI = new CRUDTeamDb();
-        //Create new product
+
+        /*
+        //Create new product - Works fine
         Product createProduct = new Product("TestOneCreate", "NewCat", false, 10.0, 10, 10.0);
-        //We can replace this code below with a call to our create method in our CRUD class and parse our product as an argument once it's implemented.
-        //Read the database and find our new product
         cI.create(createProduct);
-        /**
-         * Code in here will again be implementing our read method from our CRUD class. Our variable we will parse here
-         * will be our search query string (?)
-         */
-        cI.readByProdNameReturnId("a");
+
+
+        //Update the values of a test product
         cI.updateProduct(10, "cost", "420");
         cI.updateProduct(10, "perishable", "false");
         //cI.updateProduct(10, "prodCat", "newCat");
         //cI.updateProduct(10, "prodName", "newName");
         cI.updateProduct(10, "sell_price", "777");
         cI.updateProduct(10, "stock", "9001");
-        //Update some of the attributes of our new product
 
-        /**
-         * Code in here will get an item from our DB, create an object from this. Use setter methods to update some fields
-         * and then commit our changes to our DB.
-         */
 
-        //Delete our new product
-        //We can replace this code below with
-        /**
-        try {
-            session = HibernateUtil.getSessionFactory().openSession();
-            session.beginTransaction();
-            Product deleteProduct = session.get(Product.class, 3);
-            session.delete(deleteProduct);
-            session.getTransaction().commit();
-        } catch (HibernateException e) {
-            if (session!=null) session.getTransaction().rollback();
-            e.printStackTrace();
-        }
-*/
+        //Return the ID's of products whose name contains our parameter - Works fine
+        cI.readByProdNameReturnId("a");
+
+
+        //Update stock levels of a few products - Works fine
+        cI.updateProduct(32, "stock", "141909");
+
+
+        //Delete the product whose values we just updated - Works fine
+        cI.delete(32);
+        */
+
         //Generate a receipt from a simulated transaction
 
-        /**
-         * Here we will need to have a few calls to our transaction method simulating a customer buying a few items,
-         * and then we will call our output method where we produce our reciept.
-         */
-
-        //Update stock levels of a few products
-
-        /**
-         * Here we will have most of the same code as our update attributes method, with our only setter methods being
-         * used on stock levels.
-         * We will need to call it several times to prove we can update the stock levels of various items.
-         */
+        //TODO To be implemented
 
         //Selling wrong amounts of items (negative)
 
-        //IDs that don't exist
+        //TODO To be implemented - Awaiting UI to start this test
 
+
+        //IDs that don't exist - Works fine
+
+
+        //cI.updateProduct(10000, "stock", "420");
+
+        
         //Not enough money
+
+        //TODO To be implemented -  NEEDS TO BE FIXED, transaction still goes through
+
+        //cI.sellItem(4, 1, 70);
 
         //Being able to sell multiple items at once
 
+
+        //TODO To be implemented
+
+
         //Not enough stock to sell
+
+        //TODO To be implemented - NEEDS TO BE FIXED, To be fixed by changing line 233 in CRUDTeamDB
+
+        //cI.sellItem(4, 10000, 1000000);
 
         //We will close our session after all our tests have ran.
         session.close();
