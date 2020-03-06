@@ -1,4 +1,5 @@
-package csc1035.project3.Tests;
+package Tests;
+import CRUDInterface.*;
 import csc1035.project3.HibernateUtil;
 import csc1035.project3.Products;
 import org.hibernate.*;
@@ -23,7 +24,14 @@ public class Tests {
          * Code in here will again be implementing our read method from our CRUD class. Our variable we will parse here
          * will be our search query string (?)
          */
-
+        CRUDInterface cI = new CRUDTeamDb();
+        cI.readByProdNameReturnId("a");
+        cI.updateProduct(10, "p.cost", "420");
+        cI.updateProduct(10, "p.perishable", "false");
+        //cI.updateProduct(10, "p.category", "newCat");
+        //cI.updateProduct(10, "p.name", "newName");
+        cI.updateProduct(10, "p.sell_price", "777");
+        cI.updateProduct(10, "p.stock", "9001");
         //Update some of the attributes of our new product
 
         /**
@@ -59,6 +67,16 @@ public class Tests {
          * used on stock levels.
          * We will need to call it several times to prove we can update the stock levels of various items.
          */
+
+        //Selling wrong amounts of items (negative)
+
+        //IDs that don't exist
+
+        //Not enough money
+
+        //Being able to sell multiple items at once
+
+        //Not enough stock to sell
 
         //We will close our session after all our tests have ran.
         session.close();
