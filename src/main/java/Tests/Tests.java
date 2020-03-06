@@ -38,9 +38,10 @@ public class Tests {
         cI.delete(32);
         */
 
-        //Generate a receipt from a simulated transaction
 
-        //TODO To be implemented
+        //Selling an item works, and produces a receipt. - Works fine
+
+        //cI.sellItem(4, 1, 100);
 
         //Selling wrong amounts of items (negative)
 
@@ -52,7 +53,7 @@ public class Tests {
 
         //cI.updateProduct(10000, "stock", "420");
 
-        
+
         //Not enough money
 
         //TODO To be implemented -  NEEDS TO BE FIXED, transaction still goes through
