@@ -56,7 +56,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
     /**
      * Method to update an attribute for given product
      * @param id - id of item to be updated
-     * @param field - the field to be updated
+     * @param field - the field to be updated (to update stock, use "Stock")
      * @param newValue - the new value to be inserted
      */
     @Override
@@ -65,7 +65,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             // create query using strings, so that fields can be supplied by user
-            String updateString = "UPDATE PRODUCTS p SET " + field +" = "+newValue+" WHERE p.id = "+id;
+            String updateString = "UPDATE PRODUCTS p SET p." + field +" = "+newValue+" WHERE p.id = "+id;
             Query update = session.createQuery(updateString);
             update.executeUpdate();
             session.getTransaction().commit();
@@ -286,6 +286,11 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         }
     }
 
+    /**
+     * retrieve stock of given ID
+     * @param id - ID of item to look up in products table
+     * @return int value for stock quantity
+     */
     public int getStock(int id){
         session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
