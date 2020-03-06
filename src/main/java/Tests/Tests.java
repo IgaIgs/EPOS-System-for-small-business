@@ -1,37 +1,30 @@
 package Tests;
 import CRUDInterface.*;
 import csc1035.project3.HibernateUtil;
-import csc1035.project3.Products;
 import org.hibernate.*;
+import DbTables.Product;
 
 public class Tests {
     public static void main(String[] args) {
         //We will open our session at the start of this main so all our products access our DB.
         Session session = HibernateUtil.getSessionFactory().openSession();
+        CRUDInterface cI = new CRUDTeamDb();
         //Create new product
-        Products createProduct = new Products(0,"TestProduct","Testing",false,4.50,10,10.0);
+        Product createProduct = new Product("TestOneCreate", "NewCat", false, 10.0, 10, 10.0);
         //We can replace this code below with a call to our create method in our CRUD class and parse our product as an argument once it's implemented.
-        /**
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        session.beginTransaction();
-        session.save(createProduct);
-        session.getTransaction().commit();
-        session.close();
-         */
         //Read the database and find our new product
-
+        cI.create(createProduct);
         /**
          * Code in here will again be implementing our read method from our CRUD class. Our variable we will parse here
          * will be our search query string (?)
          */
-        CRUDInterface cI = new CRUDTeamDb();
         cI.readByProdNameReturnId("a");
-        cI.updateProduct(10, "p.cost", "420");
-        cI.updateProduct(10, "p.perishable", "false");
-        //cI.updateProduct(10, "p.category", "newCat");
-        //cI.updateProduct(10, "p.name", "newName");
-        cI.updateProduct(10, "p.sell_price", "777");
-        cI.updateProduct(10, "p.stock", "9001");
+        cI.updateProduct(10, "cost", "420");
+        cI.updateProduct(10, "perishable", "false");
+        //cI.updateProduct(10, "prodCat", "newCat");
+        //cI.updateProduct(10, "prodName", "newName");
+        cI.updateProduct(10, "sell_price", "777");
+        cI.updateProduct(10, "stock", "9001");
         //Update some of the attributes of our new product
 
         /**
@@ -45,7 +38,7 @@ public class Tests {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
-            Products deleteProduct = session.get(Products.class, 3);
+            Product deleteProduct = session.get(Product.class, 3);
             session.delete(deleteProduct);
             session.getTransaction().commit();
         } catch (HibernateException e) {
