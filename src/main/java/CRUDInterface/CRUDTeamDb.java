@@ -69,12 +69,13 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             String queryString = "";
 
             if (field == "Name" || field == "Category"){
-                queryString = "UPDATE PRODUCTS p SET p."+field+" = ?1 WHERE p.id = 10";
+                queryString = "UPDATE PRODUCTS p SET p."+field+" = ?1 WHERE p.id = ?2";
                 Query update = session.createQuery(queryString);
                 update.setParameter(1, newValue);
+                update.setParameter(2, id);
                 update.executeUpdate();
             } else {
-                queryString = "UPDATE PRODUCTS p SET p."+field+" = "+newValue+" WHERE p.id = 10";
+                queryString = "UPDATE PRODUCTS p SET p."+field+" = "+newValue+" WHERE p.id = " + id;
                 Query update = session.createQuery(queryString);
                 update.executeUpdate();
             }
