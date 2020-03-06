@@ -196,7 +196,8 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
-            Query query = session.createQuery("update PRODUCTS p set p.stock = 0 where p.id = id");
+            Query query = session.createQuery("update PRODUCTS p set p.stock = 0 where p.id = ?1");
+            query.setParameter(1, id);
             query.executeUpdate();
             session.getTransaction().commit();
         } catch (HibernateException ex) {
