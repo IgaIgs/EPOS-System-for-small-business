@@ -15,10 +15,10 @@ public class Product {
     private int productID;
 
     @Column(name = "Name")
-    private String prodName;
+    private String Name;
 
     @Column(name = "Category")
-    private String prodCat;
+    private String Cat;
 
     @Column(name = "Perishable")
     private boolean perishable;
@@ -36,9 +36,9 @@ public class Product {
     private Set<PurchaseHistory> receipts = new HashSet<>();
 
 
-    public Product(String prodName, String prodCat, boolean perishable, double cost, int stock, double sell_price) {
-        this.prodName = prodName;
-        this.prodCat = prodCat;
+    public Product(String Name, String Cat, boolean perishable, double cost, int stock, double sell_price) {
+        this.Name = Name;
+        this.Cat = Cat;
         this.perishable = perishable;
         this.cost = cost;
         this.stock = stock;
@@ -56,19 +56,19 @@ public class Product {
     }
 
     public String getProdName() {
-        return prodName;
+        return Name;
     }
 
-    public void setProdName(String prodName) {
-        this.prodName = prodName;
+    public void setProdName(String Name) {
+        this.Name = Name;
     }
 
     public String getProdCat() {
-        return prodCat;
+        return Cat;
     }
 
-    public void setProdCat(String prodCat) {
-        this.prodCat = prodCat;
+    public void setProdCat(String Cat) {
+        this.Cat = Cat;
     }
 
     public boolean isPerishable() {

@@ -27,13 +27,18 @@ public class CRUDRunner {
 //        cI.generalUpdate(purchaseHistory);
 
 
-        CRUDInterface cI = new CRUDTeamDb();
-        System.out.println("Stock of ID 4 = " + cI.getStock(4));
-
         //cI.printCategories(cI.getCategories());
         //cI.readProduct(0);
         //cI.readProduct(0);
         //cI.readByProdNameReturnId("ramm");
+
+
+
+
+        cI.updateProduct(10, "Name", "spongebob");
+
+
+
         //cI.updateProduct(4, "p.stock", "69");
 
         //Receipt ringNteq = new Receipt(287.95, "01/03/2020",290.00);
