@@ -240,8 +240,8 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             getStock.setParameter("prod_id", id);
             List stockResults = getStock.getResultList();
             int productStock = (int) stockResults.get(0);
-            if (productStock == 0){
-                System.out.println("Error: " + tempProduct.getProdName() + " is no longer in stock.");
+            if (productStock - qty >= 0){
+                System.out.println("Error: " + tempProduct.getProdName() + " has insufficient stock.");
                 return;
             }
 
