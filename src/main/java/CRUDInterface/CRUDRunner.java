@@ -8,6 +8,7 @@ public class CRUDRunner {
 
 
     public static void main(String[] args) {
+        CRUDInterface cI = new CRUDTeamDb();
 
         /*
         I've commented this out while I test other stuff

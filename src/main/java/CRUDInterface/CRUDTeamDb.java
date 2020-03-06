@@ -65,9 +65,14 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             // create query using strings, so that fields can be supplied by user
-            String updateString = "UPDATE PRODUCTS p SET " + field +" = "+newValue+" WHERE p.id = "+id;
-            Query update = session.createQuery(updateString);
-            update.executeUpdate();
+            String updateString = "UPDATE PRODUCTS p SET p." + field +" = "+ newValue + " WHERE p.id = "+id;
+            Query updateStringTEST = session.createQuery("UPDATE PRODUCTS p SET p.prodName = ?1 WHERE p.id = 10");
+            // TODO it's not called name it's called prodname
+            updateStringTEST.setParameter(1, newValue);
+            //Query update = session.createQuery(updateString);
+            //update.setParameter(1, newValue);
+            //update.executeUpdate();
+            updateStringTEST.executeUpdate();
             session.getTransaction().commit();
         } catch (HibernateException ex) {
             if (session!=null) session.getTransaction().rollback();
@@ -196,7 +201,8 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
-            Query query = session.createQuery("update PRODUCTS p set p.stock = 0 where p.id = id");
+            Query query = session.createQuery("update PRODUCTS p set p.stock = 0 where p.id = ?1");
+            query.setParameter(1, id);
             query.executeUpdate();
             session.getTransaction().commit();
         } catch (HibernateException ex) {
@@ -223,6 +229,8 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             Product tempProduct = session.get(Product.class, id);
+
+            // TODO shouldn't just be if stock is zero, test the new value first in case you have 1 and you'd sell 12
 
             // then update stock by subtracting the quantity of items sold
             Query updateStock = session.createQuery("UPDATE PRODUCTS p SET p.stock = :new_stock WHERE p.id = :prod_id");
