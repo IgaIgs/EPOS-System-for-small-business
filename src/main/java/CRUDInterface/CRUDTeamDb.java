@@ -18,6 +18,10 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
 
     private Session session = null;
 
+    /**
+     * create entries in the database
+     * @param e - entry to be created in a table
+     */
     @Override
     public void create(E e) {
         try {
@@ -35,6 +39,10 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         }
     }
 
+    /**
+     * update entries via previous instantiation
+     * @param e - update the entry in a table
+     */
     @Override
     public void generalUpdate(E e) {
 
@@ -93,6 +101,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
 
     /**
      * Returns product's id and name by category given by user
+     * @param userCat - product category specified by the user
      */
     @Override
     public void readProduct(int userCat) {
@@ -125,6 +134,10 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         }
     }
 
+    /**
+     * get a list of categories so the user choose which one they want to browse items for
+     * @return - results - the list of categories
+     */
     @Override
     public List<String> getCategories(){
         try {
@@ -150,7 +163,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
     }
 
     /**
-     * Prints categories and their corresponding IDs to console to prompt user input
+     * Prints categories and their corresponding numbers in the menu to console to prompt user input
      * @param categories - a list of all categories in products table
      */
     @Override
@@ -164,7 +177,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
     }
 
     /**
-     * Iga: This method takes a full or partial name of a product and prints out the FULL product name
+     * This method takes a full or partial name of a product and prints out the FULL product name
      * followed by this product's ID
      * @param name - the full or partial name of a product the user looks for
      */
