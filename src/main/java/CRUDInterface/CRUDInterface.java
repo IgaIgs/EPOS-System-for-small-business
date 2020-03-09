@@ -62,7 +62,7 @@ public  interface CRUDInterface<E>  {
      * @param id - ID of product (from products table) that is to be sold
      * @param qty - quantity of that product being sold
      */
-    void sellItem(int id, int qty, double paid);
+    void checkout(int id, int qty, double paid);
 
 }
 

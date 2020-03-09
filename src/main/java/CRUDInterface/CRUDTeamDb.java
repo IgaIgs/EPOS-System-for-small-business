@@ -3,6 +3,7 @@ package CRUDInterface;
 import DbTables.Product;
 import DbTables.PurchaseHistory;
 import DbTables.Receipt;
+import Output.Basket;
 import csc1035.project3.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -12,12 +13,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 // This class will contain all the CRUD methods and use the CRUD interface
+// TODO add feature to remove item(s) from basket
 public class CRUDTeamDb<E> implements CRUDInterface<E> {
 
     private Session session = null;
-
+    private Basket basket = null;
     /**
      * create entries in the database
      * @param e - entry to be created in a table
@@ -76,6 +79,10 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
 
             String queryString = "";
 
+            /*
+             in order for query to work for various data types, following if statement is used
+             this was chosen as an alternative to pulling the record and finding specific type then casting etc
+             */
             if (field == "Name" || field == "Category"){
                 queryString = "UPDATE PRODUCTS p SET p."+field+" = ?1 WHERE p.id = ?2";
                 Query update = session.createQuery(queryString);
@@ -241,40 +248,78 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
      * Then calls generatePurchaseHistoryRecord to make record in link table
      * @param id - ID of product (from products table) that is to be sold
      * @param qty - quantity of that product being sold
+     * @param paid - amount of money given in transaction
      */
-    // TODO 4 Ben : you need to move paid to a new method which loops through basket when checkout is selected
     @Override
-    public void sellItem(int id, int qty, double paid){
+    public void checkout(int id, int qty, double paid){
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            Map<Product, Integer> basketCopy = basket.getBasket();
+            int runningTotal = 0;
+
+            for (Product product : basketCopy.keySet()){
+                // increase total for receipt by multiplying sell price by quantity
+                runningTotal += product.getSell_price() * basketCopy.get(product);
+            }
+
+            // check enough has been paid, exit if not
+            if (runningTotal > paid){
+                System.out.println("Error: cash provided does not cover cost of basket (£"+runningTotal);
+                return;
+            }
+
+            for (Product product : basketCopy.keySet()){
+                // update stock by subtracting the quantity of items sold from amount currently in stock
+                Query updateStock = session.createQuery("UPDATE PRODUCTS p SET p.stock = :new_stock WHERE p.id = :prod_id");
+                updateStock.setParameter("prod_id", id);
+                updateStock.setParameter("new_stock", getStock(product.getProductID()) - basketCopy.get(product));
+                updateStock.executeUpdate();
+
+                // add receipt to receipts table
+                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                String date = new Date().toString();
+                Receipt tempReceipt = new Receipt(qty * product.getSell_price(), date, paid);
+                session.saveOrUpdate(tempReceipt);
+                session.getTransaction().commit();
+
+                // call method to add record in link table
+                generatePurchaseHistoryRecord(product, tempReceipt, qty);
+            }
+        } catch (HibernateException ex) {
+            if (session!=null) session.getTransaction().rollback();
+            ex.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+    public void addToBasket(int id, int qty){
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             Product tempProduct = session.get(Product.class, id);
+            Map<Product, Integer> basketCopy = basket.getBasket();
+            int qtyAlreadyInBasket = 0;
+
+            // find if item is already in basket and get stock if it is - to ensure enough is there for additional items
+            if (basketCopy.containsKey(tempProduct)) {
+                qtyAlreadyInBasket = basketCopy.get(tempProduct);
+            }
 
             // query to get current stock of given item
             Query getStock = session.createQuery("SELECT p.stock FROM PRODUCTS p WHERE p.id = :prod_id");
             getStock.setParameter("prod_id", id);
             List stockResults = getStock.getResultList();
             int productStock = (int) stockResults.get(0);
-            if (productStock - qty >= 0){
+            if (productStock - qty - qtyAlreadyInBasket >= 0){
                 System.out.println("Error: " + tempProduct.getProdName() + " has insufficient stock.");
                 return;
             }
 
-            // then update stock by subtracting the quantity of items sold
-            Query updateStock = session.createQuery("UPDATE PRODUCTS p SET p.stock = :new_stock WHERE p.id = :prod_id");
-            updateStock.setParameter("prod_id", id);
-            updateStock.setParameter("new_stock", productStock - qty);
-            updateStock.executeUpdate();
-
-            // add receipt to receipts table
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-            String date = new Date().toString();
-            Receipt tempReceipt = new Receipt(qty * tempProduct.getSell_price(), date, paid);
-            session.saveOrUpdate(tempReceipt);
-            session.getTransaction().commit();
-
-            // call method to add record in link table
-            generatePurchaseHistoryRecord(tempProduct, tempReceipt, qty);
+            // add to basket if enough stock is present
+            basket.add(tempProduct, qty);
 
         } catch (HibernateException ex) {
             if (session!=null) session.getTransaction().rollback();
