@@ -246,12 +246,10 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
      * When an item is sold, updates stock in database accordingly
      * Also generates receipt in receipts table
      * Then calls generatePurchaseHistoryRecord to make record in link table
-     * @param id - ID of product (from products table) that is to be sold
-     * @param qty - quantity of that product being sold
      * @param paid - amount of money given in transaction
      */
     @Override
-    public void checkout(int id, int qty, double paid){
+    public void checkout(double paid){
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
@@ -272,19 +270,19 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             for (Product product : basketCopy.keySet()){
                 // update stock by subtracting the quantity of items sold from amount currently in stock
                 Query updateStock = session.createQuery("UPDATE PRODUCTS p SET p.stock = :new_stock WHERE p.id = :prod_id");
-                updateStock.setParameter("prod_id", id);
+                updateStock.setParameter("prod_id", product.getProductID());
                 updateStock.setParameter("new_stock", getStock(product.getProductID()) - basketCopy.get(product));
                 updateStock.executeUpdate();
 
                 // add receipt to receipts table
                 DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
                 String date = new Date().toString();
-                Receipt tempReceipt = new Receipt(qty * product.getSell_price(), date, paid);
+                Receipt tempReceipt = new Receipt(basketCopy.get(product) * product.getSell_price(), date, paid);
                 session.saveOrUpdate(tempReceipt);
                 session.getTransaction().commit();
 
                 // call method to add record in link table
-                generatePurchaseHistoryRecord(product, tempReceipt, qty);
+                generatePurchaseHistoryRecord(product, tempReceipt, basketCopy.get(product));
             }
         } catch (HibernateException ex) {
             if (session!=null) session.getTransaction().rollback();
@@ -295,6 +293,12 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             }
         }
     }
+
+    /**
+     * Checks stock of item, and adds to basket if there is enough available stock
+     * @param id - id of item to add to basket
+     * @param qty - quantity of that item to add to basket
+     */
     public void addToBasket(int id, int qty){
         try {
             session = HibernateUtil.getSessionFactory().openSession();

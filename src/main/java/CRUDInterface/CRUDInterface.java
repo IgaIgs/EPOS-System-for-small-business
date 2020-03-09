@@ -56,13 +56,12 @@ public  interface CRUDInterface<E>  {
     void delete(int id);
 
     /**
-     * When an item is sold, updates stock in database accordingly
+     * When items from basket are sold, updates stock in database accordingly
      * Also generates receipt in receipts table
      * Then calls generatePurchaseHistoryRecord to make record in link table
-     * @param id - ID of product (from products table) that is to be sold
-     * @param qty - quantity of that product being sold
+     * @param paid - amount of cash paid
      */
-    void checkout(int id, int qty, double paid);
+    void checkout(double paid);
 
 }
 
