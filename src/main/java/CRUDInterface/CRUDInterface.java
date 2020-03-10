@@ -70,5 +70,6 @@ public  interface CRUDInterface<E>  {
      */
     void addToBasket(int id, int qty);
 
+    void removeFromBasket(int id, int qty);
 }
 

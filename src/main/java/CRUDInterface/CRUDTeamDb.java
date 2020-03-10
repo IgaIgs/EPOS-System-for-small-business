@@ -251,12 +251,15 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         }
     }
 
-    public void removeFromBasket(){
+    @Override
+    public void removeFromBasket(int id, int qty){
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
-            Map<Product, Integer> basketCopy = basket.getBasket();
 
+            Product tempProd = session.get(Product.class, id);
+
+            basket.remove(tempProd, qty);
             session.getTransaction().commit();
         } catch (HibernateException ex) {
             if (session!=null) session.getTransaction().rollback();
