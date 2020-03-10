@@ -63,5 +63,12 @@ public  interface CRUDInterface<E>  {
      */
     void checkout(double paid);
 
+    /**
+     * adds an item to the basket in order to sell multiple items at once
+     * @param id - id of product to add to basket
+     * @param qty - quantity of that product to add to basket
+     */
+    void addToBasket(int id, int qty);
+
 }
 
