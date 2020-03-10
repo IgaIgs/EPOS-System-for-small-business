@@ -15,34 +15,34 @@ public class Product {
     private int productID;
 
     @Column(name = "Name")
-    private String prodName;
+    private String Name;
 
     @Column(name = "Category")
-    private String prodCat;
+    private String Category;
 
     @Column(name = "Perishable")
-    private boolean perishable;
+    private boolean Perishable;
 
     @Column(name = "Cost")
-    private double cost;
+    private double Cost;
 
     @Column(name = "Stock")
-    private int stock;
+    private int Stock;
 
     @Column(name = "Selling_price")
-    private double sell_price;
+    private double Sell_price;
 
     @OneToMany(mappedBy = "product")
     private Set<PurchaseHistory> receipts = new HashSet<>();
 
 
-    public Product(String prodName, String prodCat, boolean perishable, double cost, int stock, double sell_price) {
-        this.prodName = prodName;
-        this.prodCat = prodCat;
-        this.perishable = perishable;
-        this.cost = cost;
-        this.stock = stock;
-        this.sell_price = sell_price;
+    public Product(String Name, String Cat, boolean perishable, double cost, int stock, double sell_price) {
+        this.Name = Name;
+        this.Category = Cat;
+        this.Perishable = perishable;
+        this.Cost = cost;
+        this.Stock = stock;
+        this.Sell_price = sell_price;
     }
 
     public Product(){}
@@ -56,51 +56,51 @@ public class Product {
     }
 
     public String getProdName() {
-        return prodName;
+        return Name;
     }
 
-    public void setProdName(String prodName) {
-        this.prodName = prodName;
+    public void setProdName(String Name) {
+        this.Name = Name;
     }
 
     public String getProdCat() {
-        return prodCat;
+        return Category;
     }
 
-    public void setProdCat(String prodCat) {
-        this.prodCat = prodCat;
+    public void setProdCat(String Cat) {
+        this.Category = Cat;
     }
 
     public boolean isPerishable() {
-        return perishable;
+        return Perishable;
     }
 
     public void setPerishable(boolean perishable) {
-        this.perishable = perishable;
+        this.Perishable = perishable;
     }
 
     public double getCost() {
-        return cost;
+        return Cost;
     }
 
     public void setCost(double cost) {
-        this.cost = cost;
+        this.Cost = cost;
     }
 
     public int getStock() {
-        return stock;
+        return Stock;
     }
 
     public void setStock(int stock) {
-        this.stock = stock;
+        this.Stock = stock;
     }
 
     public double getSell_price() {
-        return sell_price;
+        return Sell_price;
     }
 
     public void setSell_price(double sell_price) {
-        this.sell_price = sell_price;
+        this.Sell_price = sell_price;
     }
 
     public Set<PurchaseHistory> getReceipts() {

@@ -11,13 +11,15 @@ import java.text.*;
  */
 public class Basket {
     private Map<Product, Integer> basket;
-
     /**
      *  Creates an empty HashMap as the container for the receipt
      */
-    Basket(){
-        basket = new HashMap<>();
+    public Basket(){
+        basket = new HashMap<Product, Integer>();
     }
+
+    //private Map<Product, Integer> basket = new HashMap<Product, Integer>();
+
 
     /**
      * Return the contents of the basket
@@ -51,7 +53,7 @@ public class Basket {
         if (quantity < 1) {
             throw new IllegalArgumentException(String.format("You attempted to add %d %ss to the basket, quantities must be >= 1", quantity, item.getProdName()));
         } else {
-            if (basket.containsKey(item)) {
+            if (basket != null && basket.containsKey(item)) {
                 basket.put(item, basket.get(item) + quantity);
             } else {
                 basket.put(item, quantity);
