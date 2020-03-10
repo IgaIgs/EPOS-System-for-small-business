@@ -237,7 +237,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
-            Query query = session.createQuery("update PRODUCTS p set p.stock = 0 where p.id = ?1");
+            Query query = session.createQuery("update PRODUCTS p set p.Stock = 0 where p.id = ?1");
             query.setParameter(1, id);
             query.executeUpdate();
             session.getTransaction().commit();
@@ -289,7 +289,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
                 // calculate what the new stock level will be
                 newStock = getStock(product.getProductID()) - basketCopy.get(product);
                 // TODO this is still badly case sensitive please make it consistent -> "Stock"
-                updateProduct(product.getProductID(), "stock", String.valueOf(newStock));
+                updateProduct(product.getProductID(), "Stock", String.valueOf(newStock));
 
                 // call method to add record in link table
                 generatePurchaseHistoryRecord(product, tempReceipt, basketCopy.get(product));
@@ -332,9 +332,9 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             }
         }
     }
+
     /**
      * Checks stock of item, and adds to basket if there is enough available stock
-     *
      * @param id  - id of item to add to basket
      * @param qty - quantity of that item to add to basket
      */
@@ -410,7 +410,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             session.beginTransaction();
             Product tempProduct = session.get(Product.class, id);
 
-            Query getStock = session.createQuery("SELECT p.stock FROM PRODUCTS p WHERE p.id = :prod_id");
+            Query getStock = session.createQuery("SELECT p.Stock FROM PRODUCTS p WHERE p.id = :prod_id");
             getStock.setParameter("prod_id", id);
             List stockResults = getStock.getResultList();
             int productStock = (int) stockResults.get(0);
