@@ -85,7 +85,7 @@ public class Basket {
 
     /**
      * Remove one item from the basket
-     *
+     * NOT USED
      * @param item a product to be removed from the basket
      */
     public void remove(Product item) {
@@ -96,6 +96,7 @@ public class Basket {
         }
     }
 
+    // this one is used
     /**
      * Remove multiple of the same item from the basket
      *
@@ -126,7 +127,7 @@ public class Basket {
 
     /**
      * Remove multiple different items from the basket
-     *
+     * NOT USED
      * @param items a List of singular products to be removed from the basket
      */
     public void remove(List<Product> items) {
@@ -137,7 +138,7 @@ public class Basket {
 
     /**
      * Remove several of multiple items
-     *
+     * NOT USED
      * @param items a Map containing products as keys and quantities as values
      */
     public void remove(Map<Product, Integer> items) {

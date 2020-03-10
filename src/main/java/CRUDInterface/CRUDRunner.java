@@ -26,6 +26,8 @@ public class CRUDRunner {
 //        cI.generalUpdate(ringNteq);
 //        cI.generalUpdate(purchaseHistory);
 
+        // TODO 4 Iga: add a bunch of rammstein products to the database
+        // TODO 4 Iga and Ben: come up with a celebration idea for after the project :D
 
         //cI.printCategories(cI.getCategories());
         //cI.readProduct(0);
@@ -44,13 +46,11 @@ public class CRUDRunner {
         cI.addToBasket(4, 3);
         //cI.addToBasket(5, 1);
         cI.addToBasket(5, 2);
-        // TODO it's not checking for duplicates properly
         //cI.checkout(10000);
 
 
         cI.removeFromBasket(4, 2);
         cI.checkout(10000);
-
 
 
 
