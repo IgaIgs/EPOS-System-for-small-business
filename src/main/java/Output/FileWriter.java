@@ -66,7 +66,7 @@ public class FileWriter {
      * @throws IOException if the hardcoded file location doesn't exist (if this is thrown something is wrong)
      */
     public static void writetoTXT(Receipt receipt) throws IOException {
-        PrintWriter receiptTXT = new PrintWriter(new File(".\\main\\resources\\receipt.txt"));
+        PrintWriter receiptTXT = new PrintWriter(new File("./src/main/resources/receipt.txt"));
         receiptTXT.println(ReceiptUtil.toString(receipt));
         receiptTXT.close();
     }
