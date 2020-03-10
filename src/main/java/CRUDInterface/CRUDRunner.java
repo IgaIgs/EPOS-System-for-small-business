@@ -33,6 +33,11 @@ public class CRUDRunner {
         //cI.readByProdNameReturnId("ramm");
         //cI.updateProduct(4, "p.stock", "69");
 
+        // it works with "Name" and "Category" and "cost"
+        // but "Cost" wouldn't work
+        // TODO please make the case consistent
+        cI.updateProduct(10, "cost", "91230");
+
         //Receipt ringNteq = new Receipt(287.95, "01/03/2020",290.00);
         //cI.generalUpdate(ringNteq);
         //cI.sellItem(4, 1, 1000);

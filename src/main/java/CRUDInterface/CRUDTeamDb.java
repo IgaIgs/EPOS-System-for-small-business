@@ -65,9 +65,21 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             // create query using strings, so that fields can be supplied by user
-            String updateString = "UPDATE PRODUCTS p SET p." + field +" = "+newValue+" WHERE p.id = "+id;
-            Query update = session.createQuery(updateString);
-            update.executeUpdate();
+
+            String queryString = "";
+
+            if (field == "Name" || field == "Category"){
+                queryString = "UPDATE PRODUCTS p SET p."+field+" = ?1 WHERE p.id = ?2";
+                Query update = session.createQuery(queryString);
+                update.setParameter(1, newValue);
+                update.setParameter(2, id);
+                update.executeUpdate();
+            } else {
+                queryString = "UPDATE PRODUCTS p SET p."+field+" = "+newValue+" WHERE p.id = " + id;
+                Query update = session.createQuery(queryString);
+                update.executeUpdate();
+            }
+
             session.getTransaction().commit();
         } catch (HibernateException ex) {
             if (session!=null) session.getTransaction().rollback();
@@ -90,7 +102,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             session.beginTransaction();
             // use list of categories to convert ID from user to category name for query
             // get all items in category
-            Query query = session.createQuery("select p.id, p.prodName from PRODUCTS p where p.prodCat = :new_cat");
+            Query query = session.createQuery("select p.id, p.Name from PRODUCTS p where p.Category = :new_cat");
             query.setParameter("new_cat", cat);
 
             List results = query.getResultList();
@@ -121,7 +133,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
 
             List results = null;
             // get list of categories so user can select a category to then browse items from
-            Query query = session.createQuery("select distinct p.prodCat from PRODUCTS p");
+            Query query = session.createQuery("select distinct p.Category from PRODUCTS p");
             results = query.getResultList();
 
             session.getTransaction().commit();
@@ -162,9 +174,9 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             // find the id's of all the products whose names contain what the user inputted
-            Query query = session.createQuery("SELECT P.id FROM PRODUCTS P WHERE P.prodName LIKE :try_name");
+            Query query = session.createQuery("SELECT P.id FROM PRODUCTS P WHERE P.Name LIKE :try_name");
             // find the full names of all the products whose names contain what the user inputted
-            Query query1 = session.createQuery("SELECT P.prodName FROM PRODUCTS P WHERE P.prodName LIKE :try_name");
+            Query query1 = session.createQuery("SELECT P.Name FROM PRODUCTS P WHERE P.Name LIKE :try_name");
             // set the variable try_name from both queries to user input
             query.setParameter("try_name", "%" + name + "%");
             query1.setParameter("try_name", "%" + name + "%");
@@ -230,8 +242,8 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             getStock.setParameter("prod_id", id);
             List stockResults = getStock.getResultList();
             int productStock = (int) stockResults.get(0);
-            if (productStock == 0){
-                System.out.println("Error: " + tempProduct.getProdName() + " is no longer in stock.");
+            if (productStock - qty >= 0){
+                System.out.println("Error: " + tempProduct.getProdName() + " has insufficient stock.");
                 return;
             }
 

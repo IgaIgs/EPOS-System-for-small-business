@@ -16,7 +16,7 @@ public  interface CRUDInterface<E>  {
      */
     void generalUpdate(E e);
 
-    void updateProduct(int id, String category, String newValue);
+    void updateProduct(int id, String field, String newValue);
 
     /**
      * Returns product's id and name by category given by user
