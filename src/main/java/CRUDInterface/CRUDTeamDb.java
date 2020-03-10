@@ -350,8 +350,6 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             // find if item is already in basket and get stock if it is - to ensure enough is there for additional items
             if (basketCopy != null && basketCopy.containsKey(tempProduct)) {
                 qtyAlreadyInBasket = basketCopy.get(tempProduct);
-                // TODO test this
-                System.out.println("INSIDE NULL CHECK");
             }
 
             // query to get current stock of given item and then check there is enough to sell quantity given

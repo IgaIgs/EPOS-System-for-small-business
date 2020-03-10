@@ -41,9 +41,9 @@ public class CRUDRunner {
         //cI.generalUpdate(ringNteq);
         //cI.sellItem(4, 1, 1000);
 
-        cI.addToBasket(4, 3);
+        //cI.addToBasket(4, 3);
         cI.addToBasket(5, 1);
-        //cI.addToBasket(5, 2);
+        cI.addToBasket(5, 2);
         // TODO it's not checking for duplicates properly
         cI.checkout(10000);
 
