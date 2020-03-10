@@ -8,30 +8,36 @@ Tests are kept within a separate directory of our main EPOS system, as per the c
 
 ------------
 
-###These are the tests required in order to check the database is fully functional :
+###These are the tests being ran in order to check the database is fully functional :
 
-#####_Create a new product within the database_
+- #####_Create a new product within the database_
 
-Implementation : Create a new product object with set parameters and show this is inserted into the database.
+- #####_Read / search for products within the database_
 
-#####_Read / search for products within the database_
+- #####_Update existing products within the database_
 
-Implementation : Perform a simple search transaction for the product we created earlier.
+- #####_Updates on non-existent IDs don't cause crashes_
 
-#####_Update existing products within the database_
+- #####_Delete products within the database_
 
-Implementation : Update the product we created and found earlier.
+- #####_Produce a receipt of a transaction within the database_
 
-#####_Delete products within the database_
+- #####_Updating stock levels without using a transaction_
 
-Implementation : Delete the product that we created.
+- #####_Search by product name and return matching IDs_
 
-#####_Produce a receipt of a transaction within the database_
+- #####_Search by product name and return matching IDs_
 
-Implementation : Perform a transaction where we purchase a few items, and print the receipt from this transaction.
+- #####_Selling an item and producing a receipt_
 
-#####_Updating stock levels without using a transaction_
+- #####_Selling an item and producing a receipt_
 
-Implementation : Update stock levels and show they have been updated.
+- #####_Selling more items than are in stock
+
+- #####_Customer gives insufficient funds_
+
+- #####_Entering a negative number/invalid data for amount being sold_
+
+- #####_Selling multiple items at once_
 
 ---
