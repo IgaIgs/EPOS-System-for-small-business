@@ -22,17 +22,14 @@ Tests are kept within a separate directory of our main EPOS system, as per the c
 
 - #####_Produce a receipt of a transaction within the database_
 
-- #####_Updating stock levels without using a transaction_
+- #####_Updating stock levels without use of a purchase_
 
 - #####_Search by product name and return matching IDs_
 
-- #####_Search by product name and return matching IDs_
 
 - #####_Selling an item and producing a receipt_
 
-- #####_Selling an item and producing a receipt_
-
-- #####_Selling more items than are in stock
+- #####_Selling more items than are in stock_
 
 - #####_Customer gives insufficient funds_
 

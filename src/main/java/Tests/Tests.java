@@ -56,19 +56,19 @@ public class Tests {
 
         //Not enough money
 
-        //TODO To be implemented -  NEEDS TO BE FIXED, transaction still goes through
 
         //cI.sellItem(4, 1, 70);
 
         //Being able to sell multiple items at once
 
 
-        //TODO To be implemented
+        ///cI.addToBasket(11, 3);
+        //cI.addToBasket(10, 1);
+        //cI.addToBasket(8, 2);
+        //cI.checkout(1000);
 
 
         //Not enough stock to sell
-
-        //TODO To be implemented - NEEDS TO BE FIXED, To be fixed by changing line 233 in CRUDTeamDB
 
         //cI.sellItem(4, 10000, 1000000);
 
