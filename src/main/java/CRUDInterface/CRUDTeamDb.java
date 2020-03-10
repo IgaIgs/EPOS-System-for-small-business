@@ -242,6 +242,23 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         }
     }
 
+    public void removeFromBasket(){
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            Map<Product, Integer> basketCopy = basket.getBasket();
+
+            session.getTransaction().commit();
+        } catch (HibernateException ex) {
+            if (session!=null) session.getTransaction().rollback();
+            ex.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
     /**
      * When an item is sold, updates stock in database accordingly
      * Also generates receipt in receipts table
