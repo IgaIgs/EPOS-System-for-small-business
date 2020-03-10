@@ -19,6 +19,11 @@ public class ReceiptUtil {
         // Set shop name which will be printed at the top of the receipt
         String shopName = "Tricky Trinkets";
 
+        // Set closing sentiment which will be printed at the top of the receipt
+        String[] closingSentiment = {"Thank you for shopping at", "the world's greatest trinket shop", " ",
+                "Tell us how we did today", "Visit www.trickytrinkets.com to complete",
+                "our survey and be in for the chance", "of winning some free RammMerch"};
+
         // Get current date and time to display on the receipt
         String currentDateTime = receipt.getDate();
 
@@ -95,6 +100,11 @@ public class ReceiptUtil {
         transcript.append(String.format(configurableLineFormat, "Cash:", receipt.getPaid()));
         transcript.append(String.format(configurableLineFormat, "Change:", (receipt.getPaid() - total)));
 
+        // Closing sentiments on the bottom of the receipt, thanking for shopping today
+        transcript.append(divider);
+        for (String s: closingSentiment) {
+            transcript.append(String.format("%1$s%2$s%1$s\n", spaceChar.repeat(centerLineBuffer(lineLength, s.length())), s));
+        }
 
         transcript.append(divider);
 
