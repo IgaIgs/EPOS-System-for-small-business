@@ -233,7 +233,6 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
      */
     @Override
     public void delete(int id) {
-
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
@@ -305,7 +304,6 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             try {
                 // calculate what the new stock level will be
                 newStock = getStock(product.getProductID()) - basketCopy.get(product);
-                // TODO this is still badly case sensitive please make it consistent -> "Stock"
                 updateProduct(product.getProductID(), "Stock", String.valueOf(newStock));
 
                 // call method to add record in link table
@@ -421,6 +419,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
      * @param id - ID of item to look up in products table
      * @return int value for stock quantity
      */
+    @Override
     public int getStock(int id) {
         try {
             session = HibernateUtil.getSessionFactory().openSession();

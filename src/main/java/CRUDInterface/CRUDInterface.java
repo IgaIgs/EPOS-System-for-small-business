@@ -70,5 +70,10 @@ public  interface CRUDInterface<E>  {
      */
     void addToBasket(int id, int qty);
 
+    /**
+     * gets stock level of item from products database
+     * @param id - id of product to look up
+     */
+    void getStock(int id);
 }
 

@@ -35,17 +35,17 @@ public class CRUDRunner {
 
         // it works with "Name" and "Category" and "cost"
         // but "Cost" wouldn't work
-        cI.updateProduct(10, "Sell_price", "20");
+        //cI.updateProduct(10, "Sell_price", "20");
 
         //Receipt ringNteq = new Receipt(287.95, "01/03/2020",290.00);
         //cI.generalUpdate(ringNteq);
         //cI.sellItem(4, 1, 1000);
 
-        //cI.addToBasket(4, 3);
+        cI.addToBasket(10, 3);
         //cI.addToBasket(5, 1);
         //cI.addToBasket(5, 2);
         // TODO it's not checking for duplicates properly
-        //cI.checkout(10000);
+        cI.checkout(10000);
 
 
 
