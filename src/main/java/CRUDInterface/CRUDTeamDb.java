@@ -421,7 +421,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
      * retrieve stock of given ID
      *
      * @param id - ID of item to look up in products table
-     * @return int value for stock quantity
+     * @return int value for stock quantity (or -1 if item is out of stock)
      */
     @Override
     public int getStock(int id) {

@@ -73,6 +73,7 @@ public  interface CRUDInterface<E>  {
     /**
      * gets stock level of item from products database
      * @param id - id of product to look up
+     * @return stock of given product (or -1 if item is out of stock)
      */
     int getStock(int id);
 
