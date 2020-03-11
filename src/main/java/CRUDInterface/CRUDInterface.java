@@ -74,7 +74,7 @@ public  interface CRUDInterface<E>  {
      * gets stock level of item from products database
      * @param id - id of product to look up
      */
-    void getStock(int id);
+    int getStock(int id);
 
     /**
      * remove an item from basket (in event customer no longer wants to purchase)

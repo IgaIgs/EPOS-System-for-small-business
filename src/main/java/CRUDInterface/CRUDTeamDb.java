@@ -250,7 +250,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         }
     }
 
-    public void removeFromBasket(){
+    public void removeFromBasket(int id, int qty){
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
