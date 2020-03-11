@@ -277,18 +277,13 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
     @Override
     public void checkout(double paid) {
         Map<Product, Integer> basketCopy = basket.getBasket();
-        int runningTotal = 0;
+        double runningTotal = basket.priceTotal();
         int newStock = 0;
 
         // exit if basket is empty
         if (basketCopy == null) {
             System.out.println("Error: basket is empty");
             return;
-        }
-
-        for (Product product : basketCopy.keySet()) {
-            // increase total for receipt by multiplying sell price by quantity
-            runningTotal += product.getSell_price() * basketCopy.get(product);
         }
 
         // check enough has been paid, exit if not
@@ -326,7 +321,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
      * @param paid - the amount of money paid by the customer
      * @return returns the receipt object to be used in link table
      */
-    private Receipt generateReceipt(int runningTotal, double paid){
+    private Receipt generateReceipt(double runningTotal, double paid){
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
