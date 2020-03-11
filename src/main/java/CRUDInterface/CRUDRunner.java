@@ -25,8 +25,11 @@ public class CRUDRunner {
 //        cI.generalUpdate(rammBotOpen);
 //        cI.generalUpdate(ringNteq);
 //        cI.generalUpdate(purchaseHistory);
+        //String Name, String Cat, boolean perishable, double cost, int stock, double sell_price)
 
-
+        System.out.println("please enter name");
+        Product largePostcard = new Product("Large Postcard", "Misc", false, 2, 10, 4);
+        cI.generalUpdate(largePostcard);
         //cI.printCategories(cI.getCategories());
         //cI.readProduct(0);
         //cI.readProduct(0);
@@ -41,11 +44,11 @@ public class CRUDRunner {
         //cI.generalUpdate(ringNteq);
         //cI.sellItem(4, 1, 1000);
 
-        cI.addToBasket(10, 3);
+        //cI.addToBasket(10, 3);
         //cI.addToBasket(5, 1);
         //cI.addToBasket(5, 2);
         // TODO it's not checking for duplicates properly
-        cI.checkout(10000);
+        //cI.checkout(10000);
 
 
 

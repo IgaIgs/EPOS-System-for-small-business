@@ -451,4 +451,26 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         }
     }
 
+    /**
+     * get name from ID for printing in UI
+     * @param id - ID of product
+     * @return - name of product
+     */
+    public String getName(int id){
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            Product tempProduct = session.get(Product.class, id);
+            return tempProduct.getProdName();
+        } catch (HibernateException ex) {
+            if (session != null) session.getTransaction().rollback();
+            ex.printStackTrace();
+            throw ex;
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
 }
