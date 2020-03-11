@@ -88,5 +88,13 @@ public  interface CRUDInterface<E>  {
      * @return - total cost of basket using methods in basket class
      */
     double getBasketTotal();
+
+    /**
+     * get name of product from ID (to show user in console)
+     * @param id - ID of product
+     * @return - name of product
+     */
+    String getName(int id);
+
 }
 

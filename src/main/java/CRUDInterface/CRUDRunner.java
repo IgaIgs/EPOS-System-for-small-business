@@ -8,6 +8,7 @@ public class CRUDRunner {
 
 
     public static void main(String[] args) {
+        CRUDInterface cI = new CRUDTeamDb();
 
         /*
         I've commented this out while I test other stuff
@@ -26,9 +27,8 @@ public class CRUDRunner {
 //        cI.generalUpdate(purchaseHistory);
 
 
-        CRUDInterface cI = new CRUDTeamDb();
-        cI.printCategories(cI.getCategories());
-        cI.readProduct(0);
+        //cI.printCategories(cI.getCategories());
+        //cI.readProduct(0);
         //cI.readProduct(0);
         //cI.readByProdNameReturnId("ramm");
         //cI.updateProduct(4, "p.stock", "69");
