@@ -19,7 +19,7 @@ public class Input {
                     "4. Check stock" + "\n" +
                     "5. Checkout" + "\n" +
                     "6. Exit");
-            String theCommand = userInput.nextLine();
+            String theCommand = userInput.next();
 
             while (theCommand.equals("1")) {
                 System.out.println("What would you like to add to basket?");
@@ -30,7 +30,7 @@ public class Input {
                 System.out.println("You have added " + qty + " of " + cI.getName(id) + " to the basket");
                 break;
             }
-            while(theCommand.equals("2")){
+            while (theCommand.equals("2")){
                 System.out.println("What would you like to remove?");
                 int id = getID();
                 System.out.println("What quantity would you like to remove?");
@@ -47,7 +47,7 @@ public class Input {
                         "3. Edit product attributes" + "\n" +
                         "4. Back");
 
-                String newCommand = userInput.nextLine();
+                String newCommand = userInput.next();
 
                 while (newCommand.equals("1")){
                     System.out.println("Please enter the product name");
@@ -75,7 +75,7 @@ public class Input {
                     break;
                 }
 
-                while(newCommand.equals("3")){
+                while (newCommand.equals("3")){
                     int id = getID();
                     System.out.println("What attribute would you like to update? 'Name',\n 'Category' \n 'Perishable' \n 'Cost' \n 'Stock' \n 'Sell_price'?");
                     String fieldToUpdate = userInput.nextLine();
@@ -89,15 +89,15 @@ public class Input {
                 }
             }
 
-            while(theCommand.equals("4")) {
+            while (theCommand.equals("4")) {
                 int id = getID();
                 cI.getStock(id);
                 break;
             }
 
-            while(theCommand.equals("5")){
+            if (theCommand.equals("5")){
                 System.out.println("Are you sure you want to checkout? Y/N");
-                String YorN = userInput.nextLine();
+                String YorN = userInput.next();
                 if (YorN.equals("y") || YorN.equals("Y")){
                     System.out.println("The basket total is " + cI.getBasketTotal());
                     System.out.println("Enter amount paid by customer:");
