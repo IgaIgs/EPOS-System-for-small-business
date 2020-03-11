@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 // This class will contain all the CRUD methods and use the CRUD interface
-// TODO add feature to remove item(s) from basket
 public class CRUDTeamDb<E> implements CRUDInterface<E> {
 
     private Session session = null;
