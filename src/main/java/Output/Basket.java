@@ -143,9 +143,7 @@ public class Basket {
     public double priceTotal() {
         double total = 0;
         for (Product item: basket.keySet()) {
-            for (int i = 0; i < basket.get(item); i++){
-                total += item.getSell_price();
-            }
+                total += item.getSell_price() * basket.get(item);
         }
         return total;
     }
