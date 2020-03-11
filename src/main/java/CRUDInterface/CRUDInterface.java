@@ -82,5 +82,11 @@ public  interface CRUDInterface<E>  {
      * @param qty - quantity to remove from basket
      */
     void removeFromBasket(int id, int qty);
+
+    /**
+     * gets total cost of basket (to prompt customer how much money is needed)
+     * @return - total cost of basket using methods in basket class
+     */
+    double getBasketTotal();
 }
 
