@@ -316,6 +316,15 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
     }
 
     /**
+     * Used to return cost of basket so user can be prompted how much money is needed
+     * @return - cost of basket
+     */
+    @Override
+    public double getBasketTotal(){
+        return basket.priceTotal();
+    }
+
+    /**
      * generate a new receipt, and save it to receipts table
      * @param runningTotal - the total of the transaction
      * @param paid - the amount of money paid by the customer
