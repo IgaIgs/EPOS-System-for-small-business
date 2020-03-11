@@ -19,10 +19,9 @@ public class Input {
                     "4. Check stock" + "\n" +
                     "5. Checkout" + "\n" +
                     "6. Exit");
+            String theCommand = userInput.nextLine();
 
-            int theCommand = userInput.nextInt();
-
-            while (theCommand == 1) {
+            while (theCommand.equals("1")) {
                 System.out.println("What would you like to add to basket?");
                 int id = getID();
                 System.out.println("Quantity to add to basket");
@@ -31,7 +30,7 @@ public class Input {
                 System.out.println("You have added " + qty + " of " + cI.getName(id) + " to the basket");
                 break;
             }
-            while(theCommand == 2){
+            while(theCommand.equals("2")){
                 System.out.println("What would you like to remove?");
                 int id = getID();
                 System.out.println("What quantity would you like to remove?");
@@ -41,7 +40,7 @@ public class Input {
                 break;
             }
 
-            while (theCommand == 3) {
+            while (theCommand.equals("3")) {
 
                 System.out.println("1. Add Stock" + "\n" +
                         "2. Remove Stock" + "\n" +
@@ -63,8 +62,8 @@ public class Input {
                     int stock = userInput.nextInt();
                     System.out.println("What is the sell price of the item?");
                     double sellPrice = userInput.nextDouble();
-                    Product newitem = new Product(name, category, perishable, cost, stock , sellPrice);
-                    cI.generalUpdate(newitem);
+                    Product newItem = new Product(name, category, perishable, cost, stock , sellPrice);
+                    cI.generalUpdate(newItem);
                     break;
 
                 }
@@ -90,17 +89,18 @@ public class Input {
                 }
             }
 
-            while(theCommand == 4) {
+            while(theCommand.equals("4")) {
                 int id = getID();
                 cI.getStock(id);
                 break;
             }
 
-            while(theCommand == 5){
+            while(theCommand.equals("5")){
                 System.out.println("Are you sure you want to checkout? Y/N");
                 String YorN = userInput.nextLine();
-                while (YorN.equals("y") || YorN.equals("Y")){
+                if (YorN.equals("y") || YorN.equals("Y")){
                     System.out.println("The basket total is " + cI.getBasketTotal());
+                    System.out.println("Enter amount paid by customer:");
                     double amountPaid = userInput.nextDouble();
                     cI.checkout(amountPaid);
                     break;
@@ -110,9 +110,10 @@ public class Input {
                 }
 
             }
-            while (theCommand == 6) {
+            while (theCommand.equals("6")) {
                 System.exit(0);
             }
+
         }
     }
 
