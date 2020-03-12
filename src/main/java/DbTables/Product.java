@@ -5,6 +5,13 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * This class represents the PRODUCTS table in the database.
+ * It stores information about the products sold by the "Tricky Trinkets" store; their names, category, whether they're
+ * perishable, their cost, stock level and selling price.
+ * The primary key is an auto-generated integer ID.
+ * This table has a many-to-many relationship with the RECEIPTS table facilitated by the link-table PURCHASE HISTORY.
+ */
 @Entity(name = "PRODUCTS")
 @DynamicUpdate
 public class Product {

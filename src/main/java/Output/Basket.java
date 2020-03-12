@@ -98,18 +98,28 @@ public class Basket {
 
     /**
      * Remove multiple of the same item from the basket
-     *
+     * THIS ONE IS USED
      * @param item a product to be removed from the basket
      * @param quantity the quantity of that item to be removed from the basket
      */
     public void remove(Product item, int quantity) {
-        if ((basket.get(item) - quantity) < 0) {
-            throw new IllegalArgumentException(String.format("There are only %d %ss in the basket and you attempted to remove %d from the basket", basket.get(item), item.getProdName(), quantity));
-        }
-        if (basket.containsKey(item) && ((basket.get(item) - quantity) >= 1)) {
-            basket.put(item, basket.get(item) - quantity);
-        } else if (basket.containsKey(item) && ((basket.get(item) - quantity) == 0)) {
-            basket.remove(item);
+        for (Product product : basket.keySet()){
+            if (product.getProductID() == item.getProductID()){
+                if (basket.get(product) - quantity < 0) {
+                    throw new IllegalArgumentException(String.format("There are only %d %ss in the basket and you attempted to remove %d from the basket", basket.get(item), item.getProdName(), quantity));
+                }
+                else if (basket.get(product) - quantity >= 1) {
+                    basket.put(product, basket.get(product) - quantity);
+                    break;
+                }
+                else if (basket.get(product) - quantity == 0) {
+                    basket.remove(product);
+                    break;
+                }
+            }
+            else{
+                System.out.println("Error: item not in basket");
+            }
         }
     }
 

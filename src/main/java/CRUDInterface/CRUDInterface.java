@@ -64,16 +64,16 @@ public  interface CRUDInterface<E>  {
     void checkout(double paid);
 
     /**
-     * adds an item to the basket in order to sell multiple items at once
-     * @param id - id of product to add to basket
-     * @param qty - quantity of that product to add to basket
+     * Checks stock of item, and adds to basket if there is enough available stock
+     * @param id  - id of item to add to basket
+     * @param qty - quantity of that item to add to basket
      */
     void addToBasket(int id, int qty);
 
     /**
-     * gets stock level of item from products database
-     * @param id - id of product to look up
-     * @return stock of given product (or -1 if item is out of stock)
+     * retrieve stock of given ID
+     * @param id - ID of item to look up in products table
+     * @return int value for stock quantity (or -1 if item is out of stock)
      */
     int getStock(int id);
 

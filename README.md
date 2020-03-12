@@ -113,7 +113,7 @@ The purchase history is being backed up in a form of spreadsheet file.
      
 Running the tests:
 ------------------
-[comment]: <> (How to run tests goes here)
+For information on how to run the tests, see [README.md](.\src\main\java\Tests\README.md) in the Tests directory.
 
 Built With:
 -----------

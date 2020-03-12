@@ -1,10 +1,13 @@
 package DbTables;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * This is an embeddable class holding the composite primary key of the Purchase History table, which consists of
+ * 2 foreign keys: the ID of the Product on a certain receipt and the ID of that receipt.
+ */
 @Embeddable
 public class PurchaseHistoryID implements Serializable {
 

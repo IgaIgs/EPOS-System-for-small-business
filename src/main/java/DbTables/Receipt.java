@@ -5,6 +5,13 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * This class represents the RECEIPTS table in the database.
+ * It stores the common information all products from a purchase share: which receipt they appear on, what was the
+ * date of the transaction, the total cost of the purchase and how much money was given by the customer.
+ * The primary key is an auto-generated integer ID.
+ * This table has a many-to-many relationship with the PRODUCTS table facilitated by the link-table PURCHASE HISTORY.
+ */
 @Entity(name = "RECEIPTS")
 public class Receipt {
 

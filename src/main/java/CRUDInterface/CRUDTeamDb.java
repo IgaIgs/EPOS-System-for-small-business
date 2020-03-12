@@ -16,7 +16,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-// This class will contain all the CRUD methods and use the CRUD interface
+/**
+ * This class implements the CRUDInterface and contains all the CRUD methods used to query the database, as well as
+ * some other supporting methods to enable the interaction between classes and the functionality our system offers.
+ * @param <E> - the object to be passed into some of the methods
+ */
 public class CRUDTeamDb<E> implements CRUDInterface<E> {
 
     private Session session = null;
@@ -24,16 +28,20 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
 
     /**
      * create entries in the database
-     *
      * @param e - entry to be created in a table
      */
     @Override
     public void create(E e) {
         try {
+            // open a Hibernate session to allow for querying of the database - this will be repeated in many of the methods
             session = HibernateUtil.getSessionFactory().openSession();
+            // begin transaction
             session.beginTransaction();
+            // add an item
             session.persist(e);
+            // commit the changed to the database
             session.getTransaction().commit();
+            // close the session or throw an exception if there is an error
         } catch (HibernateException ex) {
             if (session != null) session.getTransaction().rollback();
             ex.printStackTrace();
@@ -46,7 +54,6 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
 
     /**
      * update entries via previous instantiation
-     *
      * @param e - update the entry in a table
      */
     @Override
@@ -55,6 +62,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
+            // add or update the item in the database
             session.saveOrUpdate(e);
             session.getTransaction().commit();
         } catch (HibernateException ex) {
@@ -69,9 +77,8 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
 
     /**
      * Method to update an attribute for given product
-     *
-     * @param id       - id of item to be updated
-     * @param field    - the field to be updated (to update stock, use "Stock")
+     * @param id - id of item to be updated
+     * @param field - the field to be updated (to update stock, use "Stock")
      * @param newValue - the new value to be inserted
      */
     @Override
@@ -79,9 +86,9 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
-            // create query using strings, so that fields can be supplied by user
 
-            String queryString = "";
+            // create query using strings, so that fields can be supplied by user
+            String queryString;
 
             /*
              in order for query to work for various data types, following if statement is used
@@ -90,7 +97,9 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             if (field == "Name" || field == "Category") {
                 queryString = "UPDATE PRODUCTS p SET p." + field + " = ?1 WHERE p.id = ?2";
                 Query update = session.createQuery(queryString);
+                // allow user to specify which fields/attributes they want to change and to what value
                 update.setParameter(1, newValue);
+                // choose the product which will be updated
                 update.setParameter(2, id);
                 update.executeUpdate();
             } else {
@@ -112,25 +121,27 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
 
     /**
      * Returns product's id and name by category given by user
-     *
      * @param userCat - product category specified by the user
      */
     @Override
     public void readProduct(int userCat) {
         try {
+            // get the name of the category the user wants to look up the items in
             String cat = getCategories().get(userCat);
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
-            // use list of categories to convert ID from user to category name for query
-            // get all items in category
+
+            // get the names and IDs of the products in chosen category
             Query query = session.createQuery("select p.id, p.Name from PRODUCTS p where p.Category = :new_cat");
             query.setParameter("new_cat", cat);
 
+            // put results in a list
             List results = query.getResultList();
             Object[] items = results.toArray();
 
+            // print a user-friendly mapping of names and IDs of items in a category
             System.out.println("Items in category " + cat + ":");
-            System.out.println("Number --> Category");
+            System.out.println("ID     --> Product Name");
             for (int i = 0; i < items.length; i++) {
                 Object[] tmp = (Object[]) items[i];
                 System.out.println(tmp[0] + "\t   --> " + tmp[1]);
@@ -148,7 +159,6 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
 
     /**
      * get a list of categories so the user choose which one they want to browse items for
-     *
      * @return - results - the list of categories
      */
     @Override
@@ -157,7 +167,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
 
-            List results = null;
+            List results;
             // get list of categories so user can select a category to then browse items from
             Query query = session.createQuery("select distinct p.Category from PRODUCTS p");
             results = query.getResultList();
@@ -177,11 +187,11 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
 
     /**
      * Prints categories and their corresponding numbers in the menu to console to prompt user input
-     *
      * @param categories - a list of all categories in products table
      */
     @Override
     public void printCategories(List<String> categories) {
+        // print a user-friendly mapping of menu option numbers and category names
         System.out.println("Available categories:");
         System.out.println("Number --> Category");
         for (int i = 0; i < categories.size(); i++) {
@@ -193,7 +203,6 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
     /**
      * This method takes a full or partial name of a product and prints out the FULL product name
      * followed by this product's ID
-     *
      * @param name - the full or partial name of a product the user looks for
      */
     @Override
@@ -227,8 +236,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
     }
 
     /**
-     * Iga: This method deletes a product from the database by setting its stock to 0 (cuz key constraints)
-     *
+     * This method 'deletes' a product from the database by setting its stock to 0 (cuz key constraints)
      * @param id - product id
      */
     @Override
@@ -236,7 +244,9 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
+            // set the stock of the product to be deleted to zero (to prevent further sales but to keep the record)
             Query query = session.createQuery("update PRODUCTS p set p.Stock = 0 where p.id = ?1");
+            // choose the ID of the product to be deleted
             query.setParameter(1, id);
             query.executeUpdate();
             session.getTransaction().commit();
@@ -250,11 +260,22 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         }
     }
 
+    /**
+     * remove an item from basket (in event customer no longer wants to purchase)
+     * @param id - id of item
+     * @param qty - quantity to remove from basket
+     */
+    @Override
     public void removeFromBasket(int id, int qty){
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
-            Map<Product, Integer> basketCopy = basket.getBasket();
+
+            // find the product to be deleted from the basket by ID
+            Product tempProd = session.get(Product.class, id);
+
+            // remove the product from the basket using a remove method from Basket.java
+            basket.remove(tempProd, qty);
 
             session.getTransaction().commit();
         } catch (HibernateException ex) {
@@ -268,17 +289,16 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
     }
 
     /**
-     * When an item is sold, updates stock in database accordingly
+     * When items from basket are sold, updates stock in database accordingly
      * Also generates receipt in receipts table
      * Then calls generatePurchaseHistoryRecord to make record in link table
-     *
-     * @param paid - amount of money given in transaction
+     * @param paid - amount of cash paid
      */
     @Override
     public void checkout(double paid) {
         Map<Product, Integer> basketCopy = basket.getBasket();
         double runningTotal = basket.priceTotal();
-        int newStock = 0;
+        int newStock;
 
         // exit if basket is empty
         if (basketCopy == null) {
@@ -337,9 +357,14 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+
+            // get the current date to be put on the receipt
             String date = new Date().toString();
+
+            // create a receipt
             Receipt tempReceipt = new Receipt(runningTotal, date, paid);
+
+            // add the receipt to the database
             session.saveOrUpdate(tempReceipt);
             session.getTransaction().commit();
             session.close();
@@ -365,8 +390,13 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
+
+            // get the product with the ID specified
             Product tempProduct = session.get(Product.class, id);
+            // create a basket object
             Map<Product, Integer> basketCopy = basket.getBasket();
+
+            // set the quantity of items in the basket to zero at the beginning of transcation
             int qtyAlreadyInBasket = 0;
 
             // find if item is already in basket and get stock if it is - to ensure enough is there for additional items
@@ -406,6 +436,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
 
+            // create a new object of the purchase history
             PurchaseHistory purchaseHistory = new PurchaseHistory(product, receipt, qty);
 
             session.saveOrUpdate(purchaseHistory);
@@ -422,7 +453,6 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
 
     /**
      * retrieve stock of given ID
-     *
      * @param id - ID of item to look up in products table
      * @return int value for stock quantity (or -1 if item is out of stock)
      */
@@ -431,10 +461,15 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
+
+            // find the product with the ID given
             Product tempProduct = session.get(Product.class, id);
 
+            // get the stock of this product
             Query getStock = session.createQuery("SELECT p.Stock FROM PRODUCTS p WHERE p.id = :prod_id");
             getStock.setParameter("prod_id", id);
+
+            // put the stock results in a list
             List stockResults = getStock.getResultList();
             int productStock = (int) stockResults.get(0);
             if (productStock == 0) {
