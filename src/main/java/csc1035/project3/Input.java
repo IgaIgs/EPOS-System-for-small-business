@@ -79,21 +79,48 @@ public class Input {
                 while (newCommand.equals("3")){
                     int id = getID();
                     System.out.println("What attribute would you like to update? 'Name',\n 'Category' \n 'Perishable' \n 'Cost' \n 'Stock' \n 'Sell_price'?");
-                    String fieldToUpdate = userInput.nextLine();
+                    String fieldToUpdate = userInput.next();
                     System.out.println("Input the new value");
-                    String newValue = userInput.nextLine();
+                    String newValue = userInput.next();
                     cI.updateProduct(id, fieldToUpdate, newValue);
                     break;
 
-                }if (newCommand.equals("4")){
+                }
+                if(newCommand.equals("4")){
                     break;
                 }
             }
 
             while (theCommand.equals("4")) {
-                int id = getID();
-                cI.getStock(id);
-                break;
+                System.out.println("1. Check Stock of individual Product" + "\n" +
+                        "2. Display current categories" + "\n" +
+                        "3. Display all products in a chosen category" + "\n" +
+                        "4. Search for product ID by name" + "\n" +
+                        "5. Back");
+                String newCommand = userInput.next();
+                while(newCommand.equals("1")) {
+                    int id = getID();
+                    cI.getStock(id);
+                    break;
+                }
+                while(newCommand.equals("2")){
+                    cI.getCategories();
+                    break;
+                }
+                while(newCommand.equals("3")){
+                    System.out.println("Please enter the number of the category");
+                    int userCat = userInput.nextInt();
+                    cI.readProduct(userCat);
+                    break;
+                }while(newCommand.equals("4")){
+                    System.out.println("Please enter the name of the product you would like the ID for");
+                    String searchName = userInput.nextLine();
+                    cI.readByProdNameReturnId(searchName);
+                    break;
+                }
+                if(newCommand.equals("5")){
+                    break;
+                }
             }
 
             if (theCommand.equals("5")){
