@@ -32,6 +32,8 @@ This program has following functionality:
 * [Generate a receipt](#generate-a-receipt)
 * [Keep track of purchase history](#keep-track-of-purchase-history)
 
+To select an option from the menu enter the number next to said option into the console.
+
 ##### Add a new product to the database
 The user can add any product to their product table after specifying all of its attributes: name, category, whether it's
 perishable or not, cost, stock and selling price.
