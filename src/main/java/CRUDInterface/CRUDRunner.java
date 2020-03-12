@@ -27,9 +27,9 @@ public class CRUDRunner {
 //        cI.generalUpdate(purchaseHistory);
         //String Name, String Cat, boolean perishable, double cost, int stock, double sell_price)
 
-        System.out.println("please enter name");
-        Product largePostcard = new Product("Large Postcard", "Misc", false, 2, 10, 4);
-        cI.generalUpdate(largePostcard);
+        //System.out.println("please enter name");
+        //Product largePostcard = new Product("Large Postcard", "Misc", false, 2, 10, 4);
+        //cI.generalUpdate(largePostcard);
         //cI.printCategories(cI.getCategories());
         //cI.readProduct(0);
         //cI.readProduct(0);
