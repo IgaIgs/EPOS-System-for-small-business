@@ -36,6 +36,7 @@ This program has following functionality:
 The user can add any product to their product table after specifying all of its attributes: name, category, whether it's
 perishable or not, cost, stock and selling price.
 > In the background: this uses the create(E e) method which adds a given instance of the product object to the database.
+
 ##### Display current categories
 The user can check what categories are currently in use in his stock.
 This also makes it easier to search for a product if the user does not remember the name of the product or which category it belongs to or if the customer
@@ -58,6 +59,8 @@ This way the user can easily update the stock of a product independently of actu
 throw away some out-of-date products or gave them away to someone without a customer transaction etc.)
 > In the background: this uses the updateProduct(int id, String field, String newValue) method with string queries which
 allow for the user input to supply the fields
+
+
 ##### Search for product ID by name
 The user can get the ID and a full name of a product by its name or just a partial name of it. 
 
