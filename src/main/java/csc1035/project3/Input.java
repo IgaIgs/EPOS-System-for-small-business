@@ -108,10 +108,12 @@ public class Input {
                     break;
                 }
                 while(newCommand.equals("3")){
+                    System.out.println("Please enter the number of the category");
                     int userCat = userInput.nextInt();
                     cI.readProduct(userCat);
                     break;
                 }while(newCommand.equals("4")){
+                    System.out.println("Please enter the name of the product you would like the ID for");
                     String searchName = userInput.nextLine();
                     cI.readByProdNameReturnId(searchName);
                     break;
