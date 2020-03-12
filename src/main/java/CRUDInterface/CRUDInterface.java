@@ -97,5 +97,10 @@ public  interface CRUDInterface<E>  {
      */
     String getName(int id);
 
+    /**
+     * prints a receipt in console from the given ID, in case shopkeeper wishes to look up a previous receipt
+     * @param id - ID of receipt to look up
+     */
+    void printReceiptByID (int id);
 }
 

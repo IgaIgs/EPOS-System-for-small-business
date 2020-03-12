@@ -40,12 +40,7 @@ public class CRUDRunner {
         //cI.generalUpdate(ringNteq);
         //cI.sellItem(4, 1, 1000);
 
-        cI.addToBasket(10, 3);
-        cI.addToBasket(5, 1);
-        cI.checkout(10000);
-
-
-
+        cI.printReceiptByID(110);
 
     }
 }

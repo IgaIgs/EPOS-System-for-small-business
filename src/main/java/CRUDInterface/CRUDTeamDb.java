@@ -459,12 +459,36 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
      * @param id - ID of product
      * @return - name of product
      */
+    @Override
     public String getName(int id){
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             Product tempProduct = session.get(Product.class, id);
             return tempProduct.getProdName();
+        } catch (HibernateException ex) {
+            if (session != null) session.getTransaction().rollback();
+            ex.printStackTrace();
+            throw ex;
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
+    /**
+     * print receipt in console from given ID
+     * @param id - ID of receipt to look up
+     */
+    @Override
+    public void printReceiptByID (int id){
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+
+            Receipt tempReceipt = session.get(Receipt.class, id);
+            System.out.println(ReceiptUtil.toString(tempReceipt));
         } catch (HibernateException ex) {
             if (session != null) session.getTransaction().rollback();
             ex.printStackTrace();
