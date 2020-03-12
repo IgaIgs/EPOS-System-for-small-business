@@ -4,6 +4,7 @@ import DbTables.Product;
 import DbTables.PurchaseHistory;
 import DbTables.Receipt;
 import Output.Basket;
+import Output.ReceiptUtil;
 import csc1035.project3.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -303,6 +304,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
                 // call method to add record in link table
                 generatePurchaseHistoryRecord(product, tempReceipt, basketCopy.get(product));
 
+
             } catch (HibernateException ex) {
                 if (session != null) session.getTransaction().rollback();
                 ex.printStackTrace();
@@ -312,6 +314,8 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
                 }
             }
         }
+        // print receipt in console
+        System.out.println(ReceiptUtil.toString(tempReceipt));
     }
 
     /**
