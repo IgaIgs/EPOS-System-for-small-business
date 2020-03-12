@@ -73,12 +73,6 @@ there is insufficient stock for this.
 
 
 
-#####Entering a negative number/invalid data for amount being sold
-
->Expected result : Program will ask for correct user input rather than crashing
-
-
-
 #####Selling multiple items at once
 
 >Expected result : Items are added to the basket and then processed. Previous checks of whether or not we have
