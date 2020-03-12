@@ -113,7 +113,8 @@ The purchase history is being backed up in a form of spreadsheet file.
      
 Running the tests:
 ------------------
-[comment]: <> (How to run tests goes here)
+Tests are stored within the Tests directory, in the Tests.java class. The readme in the tests directory contains a list
+of methods that are in the class, as well as the expected result.
 
 Built With:
 -----------
