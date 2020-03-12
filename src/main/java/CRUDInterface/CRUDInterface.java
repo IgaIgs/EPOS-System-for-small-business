@@ -73,6 +73,7 @@ public  interface CRUDInterface<E>  {
     /**
      * gets stock level of item from products database
      * @param id - id of product to look up
+     * @return stock of given product (or -1 if item is out of stock)
      */
     int getStock(int id);
 
@@ -96,5 +97,10 @@ public  interface CRUDInterface<E>  {
      */
     String getName(int id);
 
+    /**
+     * prints a receipt in console from the given ID, in case shopkeeper wishes to look up a previous receipt
+     * @param id - ID of receipt to look up
+     */
+    void printReceiptByID (int id);
 }
 

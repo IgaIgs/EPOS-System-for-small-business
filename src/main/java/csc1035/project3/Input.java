@@ -18,7 +18,8 @@ public class Input {
                     "3. Edit stock" + "\n" +
                     "4. Check stock" + "\n" +
                     "5. Checkout" + "\n" +
-                    "6. Exit");
+                    "6. Print previous receipt" + "\n" +
+                    "7. Exit");
             String theCommand = userInput.next();
 
             while (theCommand.equals("1")) {
@@ -110,7 +111,14 @@ public class Input {
                 }
 
             }
-            while (theCommand.equals("6")) {
+            while (theCommand.equals("6")){
+                System.out.println("Please enter previous receipt ID");
+                int receiptID = userInput.nextInt();
+                cI.printReceiptByID(receiptID);
+                break;
+
+            }
+            while (theCommand.equals("7")) {
                 System.exit(0);
             }
 

@@ -4,6 +4,7 @@ import DbTables.Product;
 import DbTables.PurchaseHistory;
 import DbTables.Receipt;
 import Output.Basket;
+import Output.ReceiptUtil;
 import csc1035.project3.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -16,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 // This class will contain all the CRUD methods and use the CRUD interface
-// TODO add feature to remove item(s) from basket
 public class CRUDTeamDb<E> implements CRUDInterface<E> {
 
     private Session session = null;
@@ -304,6 +304,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
                 // call method to add record in link table
                 generatePurchaseHistoryRecord(product, tempReceipt, basketCopy.get(product));
 
+
             } catch (HibernateException ex) {
                 if (session != null) session.getTransaction().rollback();
                 ex.printStackTrace();
@@ -313,6 +314,8 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
                 }
             }
         }
+        // print receipt in console
+        System.out.println(ReceiptUtil.toString(tempReceipt));
     }
 
     /**
@@ -421,7 +424,7 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
      * retrieve stock of given ID
      *
      * @param id - ID of item to look up in products table
-     * @return int value for stock quantity
+     * @return int value for stock quantity (or -1 if item is out of stock)
      */
     @Override
     public int getStock(int id) {
@@ -463,6 +466,29 @@ public class CRUDTeamDb<E> implements CRUDInterface<E> {
             session.beginTransaction();
             Product tempProduct = session.get(Product.class, id);
             return tempProduct.getProdName();
+        } catch (HibernateException ex) {
+            if (session != null) session.getTransaction().rollback();
+            ex.printStackTrace();
+            throw ex;
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
+    /**
+     * print receipt in console from given ID
+     * @param id - ID of receipt to look up
+     */
+    @Override
+    public void printReceiptByID (int id){
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+
+            Receipt tempReceipt = session.get(Receipt.class, id);
+            System.out.println(ReceiptUtil.toString(tempReceipt));
         } catch (HibernateException ex) {
             if (session != null) session.getTransaction().rollback();
             ex.printStackTrace();
